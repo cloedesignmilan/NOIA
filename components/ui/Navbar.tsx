@@ -12,6 +12,9 @@ export function Navbar() {
     const pathname = usePathname();
     const [user, setUser] = useState<any>(null);
 
+    // Hide Navbar on Landing Page (it has its own Header)
+    if (pathname === '/') return null;
+
     useEffect(() => {
         supabase.auth.getUser().then(({ data: { user } }) => {
             setUser(user);

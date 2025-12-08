@@ -24,7 +24,7 @@ export default function LoginPage() {
             router.push('/dashboard');
         } catch (err: any) {
             console.error(err);
-            setError('Email o password non validi.');
+            setError(err.message || 'Email o password non validi.');
         } finally {
             setIsLoading(false);
         }
