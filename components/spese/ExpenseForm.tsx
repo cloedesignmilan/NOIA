@@ -255,7 +255,7 @@ export function ExpenseForm({ isOpen, onClose, onSuccess, initialData }: Expense
                                     onClick={() => { setCategory(c.name); }}
                                     className={cn(
                                         "p-3 rounded-xl border text-sm font-medium text-left transition-all",
-                                        category === c.name && !isCustomSelected ? "border-destructive bg-destructive/5 text-destructive ring-1 ring-destructive/20" : "border-border/50 bg-background hover:bg-muted/50"
+                                        category === c.name ? "border-destructive bg-destructive/5 text-destructive ring-1 ring-destructive/20" : "border-border/50 bg-background hover:bg-muted/50"
                                     )}
                                 >
                                     {c.name}

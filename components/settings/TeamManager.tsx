@@ -191,106 +191,212 @@ export function TeamManager() {
                     </h2>
                     <p className="text-sm text-muted-foreground">Gestisci i collaboratori e i loro livelli di accesso.</p>
                 </div>
-                <div className="space-y-1">
-                    <label className="text-xs font-medium text-muted-foreground">Permessi</label>
-                    <select
-                        value={newAccess}
-                        onChange={e => setNewAccess(e.target.value)}
-                        className="w-full h-10 px-3 rounded-lg bg-background border border-border focus:ring-2 focus:ring-primary/20 outline-none"
-                    >
-                        <option value="full_access">Modifica & Scrittura</option>
-                        <option value="read_only">Sola Lettura</option>
-                    </select>
-                </div>
-            </div>
-            <div className="flex justify-end gap-2 pt-2">
-                <button type="button" onClick={() => setIsInviting(false)} className="px-4 py-2 text-sm font-medium text-muted-foreground hover:bg-muted rounded-lg">Annulla</button>
-                <button type="submit" disabled={isSubmitting} className="px-4 py-2 text-sm font-bold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 flex items-center gap-2">
-                    {isSubmitting && <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
-                    {createMode ? 'Crea Account' : 'Invia Invito'}
+                <button
+                    onClick={() => setIsInviting(!isInviting)}
+                    disabled={members.length >= (currentMaxAgents || 999)}
+                    className="btn-primary px-4 py-2 text-sm font-bold rounded-xl flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    <Plus className="w-4 h-4" /> Gestisci Utenti
                 </button>
             </div>
-        </form>
-    )
-}
 
-{/* Pending Invites */ }
-{
-    invites.length > 0 && (
-        <div className="space-y-3">
-            <h3 className="text-xs font-bold uppercase text-muted-foreground ml-1">Inviti in Attesa</h3>
-            <div className="grid gap-2">
-                {invites.map(invite => (
-                    <div key={invite.email} className="flex items-center justify-between p-3 rounded-xl border border-dashed border-yellow-300 bg-yellow-50/50 dark:border-yellow-800 dark:bg-yellow-900/10">
-                        <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600">
-                                <Mail className="w-4 h-4" />
-                            </div>
-                            <div>
-                                <div className="font-medium text-sm">{invite.email}</div>
-                                <div className="text-xs text-muted-foreground flex gap-2">
-                                    <span className="capitalize">{getRoleLabel(invite.role)}</span> •
-                                    <span>{getAccessLabel(invite.access_level)}</span>
-                                </div>
-                            </div>
+            {/* Limit Warning */}
+            {members.length >= (currentMaxAgents || 999) && (
+                <div className="bg-amber-500/10 border border-amber-500/50 rounded-lg p-4 text-amber-600 text-sm font-bold flex items-center justify-between animate-in fade-in slide-in-from-top-2">
+                    <span className="flex items-center gap-2">
+                        <Shield className="w-4 h-4" />
+                        Hai raggiunto il limite di membri per il tuo piano ({currentMaxAgents}).
+                    </span>
+                    <Link href="/settings/billing" className="underline hover:no-underline">Upgrade Piano</Link>
+                </div>
+            )}
+
+            {/* Invite Form */}
+            {isInviting && (
+                <form onSubmit={handleInvite} className="bg-muted/30 p-4 rounded-xl border border-border/50 animate-in slide-in-from-top-2 space-y-4">
+                    <div className="flex justify-between items-center mb-2">
+                        <h3 className="text-sm font-bold">Nuovo Collaboratore</h3>
+                        <div className="flex items-center gap-2 text-xs">
+                            <span className={!createMode ? "font-bold" : "text-muted-foreground"}>Invita Email</span>
+                            <button
+                                type="button"
+                                onClick={() => setCreateMode(!createMode)}
+                                className={`w-10 h-6 rounded-full p-1 transition-colors ${createMode ? 'bg-primary' : 'bg-muted-foreground/30'}`}
+                            >
+                                <div className={`w-4 h-4 bg-white rounded-full shadow-sm transform transition-transform ${createMode ? 'translate-x-4' : ''}`} />
+                            </button>
+                            <span className={createMode ? "font-bold" : "text-muted-foreground"}>Crea Account Subito</span>
                         </div>
-                        <button
-                            onClick={() => handleDeleteInvite(invite.email)}
-                            className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                            title="Revoca Invito"
-                        >
-                            <Trash2 className="w-4 h-4" />
+                    </div>
+
+                    <div className={cn("grid gap-4", createMode ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-3")}>
+                        {/* Name Fields (Visible if Create Mode) */}
+                        {createMode && (
+                            <>
+                                <div className="space-y-1">
+                                    <label className="text-xs font-medium text-muted-foreground">Nome</label>
+                                    <input
+                                        type="text"
+                                        required
+                                        value={newFirstName}
+                                        onChange={e => setNewFirstName(e.target.value)}
+                                        className="w-full h-10 px-3 rounded-lg bg-background border border-border focus:ring-2 focus:ring-primary/20 outline-none"
+                                        placeholder="Mario"
+                                    />
+                                </div>
+                                <div className="space-y-1">
+                                    <label className="text-xs font-medium text-muted-foreground">Cognome</label>
+                                    <input
+                                        type="text"
+                                        required
+                                        value={newLastName}
+                                        onChange={e => setNewLastName(e.target.value)}
+                                        className="w-full h-10 px-3 rounded-lg bg-background border border-border focus:ring-2 focus:ring-primary/20 outline-none"
+                                        placeholder="Rossi"
+                                    />
+                                </div>
+                            </>
+                        )}
+
+                        <div className="space-y-1">
+                            <label className="text-xs font-medium text-muted-foreground">Email Collaboratore</label>
+                            <input
+                                type="email"
+                                required
+                                value={newEmail}
+                                onChange={e => setNewEmail(e.target.value)}
+                                className="w-full h-10 px-3 rounded-lg bg-background border border-border focus:ring-2 focus:ring-primary/20 outline-none"
+                                placeholder="mario.rossi@email.com"
+                            />
+                        </div>
+
+                        {/* Password Field (Visible if Create Mode) */}
+                        {createMode && (
+                            <div className="space-y-1">
+                                <label className="text-xs font-medium text-muted-foreground">Password Iniziale</label>
+                                <input
+                                    type="text"
+                                    required
+                                    value={newPassword}
+                                    onChange={e => setNewPassword(e.target.value)}
+                                    className="w-full h-10 px-3 rounded-lg bg-background border border-border focus:ring-2 focus:ring-primary/20 outline-none font-mono"
+                                    placeholder="Password123!"
+                                />
+                            </div>
+                        )}
+
+                        <div className="space-y-1">
+                            <label className="text-xs font-medium text-muted-foreground">Ruolo</label>
+                            <select
+                                value={newRole}
+                                onChange={e => setNewRole(e.target.value)}
+                                className="w-full h-10 px-3 rounded-lg bg-background border border-border focus:ring-2 focus:ring-primary/20 outline-none"
+                            >
+                                <option value="agent">Agente</option>
+                                <option value="secretary">Segretaria</option>
+                                <option value="accountant">Commercialista</option>
+                                <option value="admin">Amministratore</option>
+                            </select>
+                        </div>
+                        <div className="space-y-1">
+                            <label className="text-xs font-medium text-muted-foreground">Permessi</label>
+                            <select
+                                value={newAccess}
+                                onChange={e => setNewAccess(e.target.value)}
+                                className="w-full h-10 px-3 rounded-lg bg-background border border-border focus:ring-2 focus:ring-primary/20 outline-none"
+                            >
+                                <option value="full_access">Modifica & Scrittura</option>
+                                <option value="read_only">Sola Lettura</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div className="flex justify-end gap-2 pt-2">
+                        <button type="button" onClick={() => setIsInviting(false)} className="px-4 py-2 text-sm font-medium text-muted-foreground hover:bg-muted rounded-lg">Annulla</button>
+                        <button type="submit" disabled={isSubmitting} className="px-4 py-2 text-sm font-bold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 flex items-center gap-2">
+                            {isSubmitting && <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
+                            {createMode ? 'Crea Account' : 'Invia Invito'}
                         </button>
                     </div>
-                ))}
-            </div>
-        </div>
-    )
-}
+                </form>
+            )}
 
-{/* Active Members */ }
-<div className="space-y-3">
-    <h3 className="text-xs font-bold uppercase text-muted-foreground ml-1">Membri Attivi ({members.length})</h3>
-    <div className="grid gap-2">
-        {members.map(member => (
-            <div key={member.id} className="group flex items-center justify-between p-3 rounded-xl border border-border bg-card hover:border-primary/30 transition-all">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
-                        {member.full_name ? member.full_name[0] : (member.first_name?.[0] || '?')}
-                    </div>
-                    <div>
-                        <div className="font-bold text-sm">
-                            {member.full_name || `${member.first_name || ''} ${member.last_name || ''}` || member.email}
-                            {member.role === 'owner' && <span className="ml-2 text-[10px] bg-yellow-100 text-yellow-800 px-1.5 py-0.5 rounded border border-yellow-200">PROPRIETARIO</span>}
+            {/* Pending Invites */}
+            {
+                invites.length > 0 && (
+                    <div className="space-y-3">
+                        <h3 className="text-xs font-bold uppercase text-muted-foreground ml-1">Inviti in Attesa</h3>
+                        <div className="grid gap-2">
+                            {invites.map(invite => (
+                                <div key={invite.email} className="flex items-center justify-between p-3 rounded-xl border border-dashed border-yellow-300 bg-yellow-50/50 dark:border-yellow-800 dark:bg-yellow-900/10">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600">
+                                            <Mail className="w-4 h-4" />
+                                        </div>
+                                        <div>
+                                            <div className="font-medium text-sm">{invite.email}</div>
+                                            <div className="text-xs text-muted-foreground flex gap-2">
+                                                <span className="capitalize">{getRoleLabel(invite.role)}</span> •
+                                                <span>{getAccessLabel(invite.access_level)}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => handleDeleteInvite(invite.email)}
+                                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                        title="Revoca Invito"
+                                    >
+                                        <Trash2 className="w-4 h-4" />
+                                    </button>
+                                </div>
+                            ))}
                         </div>
-                        <div className="text-xs text-muted-foreground flex flex-wrap gap-2 mt-0.5">
-                            <span className="bg-muted px-1.5 py-0.5 rounded text-xs border border-border">{getRoleLabel(member.role)}</span>
-                            <span className={cn("px-1.5 py-0.5 rounded text-xs border flex items-center gap-1",
-                                member.access_level === 'read_only'
-                                    ? "border-orange-200 bg-orange-50 text-orange-700"
-                                    : "border-green-200 bg-green-50 text-green-700"
-                            )}>
-                                {member.access_level === 'read_only' ? <Eye className="w-3 h-3" /> : <Shield className="w-3 h-3" />}
-                                {getAccessLabel(member.access_level || 'full_access')}
-                            </span>
-                        </div>
                     </div>
+                )
+            }
+
+            {/* Active Members */}
+            <div className="space-y-3">
+                <h3 className="text-xs font-bold uppercase text-muted-foreground ml-1">Membri Attivi ({members.length})</h3>
+                <div className="grid gap-2">
+                    {members.map(member => (
+                        <div key={member.id} className="group flex items-center justify-between p-3 rounded-xl border border-border bg-card hover:border-primary/30 transition-all">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+                                    {member.full_name ? member.full_name[0] : (member.first_name?.[0] || '?')}
+                                </div>
+                                <div>
+                                    <div className="font-bold text-sm">
+                                        {member.full_name || `${member.first_name || ''} ${member.last_name || ''}` || member.email}
+                                        {member.role === 'owner' && <span className="ml-2 text-[10px] bg-yellow-100 text-yellow-800 px-1.5 py-0.5 rounded border border-yellow-200">PROPRIETARIO</span>}
+                                    </div>
+                                    <div className="text-xs text-muted-foreground flex flex-wrap gap-2 mt-0.5">
+                                        <span className="bg-muted px-1.5 py-0.5 rounded text-xs border border-border">{getRoleLabel(member.role)}</span>
+                                        <span className={cn("px-1.5 py-0.5 rounded text-xs border flex items-center gap-1",
+                                            member.access_level === 'read_only'
+                                                ? "border-orange-200 bg-orange-50 text-orange-700"
+                                                : "border-green-200 bg-green-50 text-green-700"
+                                        )}>
+                                            {member.access_level === 'read_only' ? <Eye className="w-3 h-3" /> : <Shield className="w-3 h-3" />}
+                                            {getAccessLabel(member.access_level || 'full_access')}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Actions: Owner can remove anyone except themselves */}
+                            {(currentUserRole === 'owner' && member.role !== 'owner') && (
+                                <button
+                                    onClick={() => handleRemoveMember(member.id)}
+                                    className="opacity-0 group-hover:opacity-100 p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg transition-all"
+                                    title="Rimuovi dal Team"
+                                >
+                                    <Trash2 className="w-4 h-4" />
+                                </button>
+                            )}
+                        </div>
+                    ))}
                 </div>
-
-                {/* Actions: Owner can remove anyone except themselves */}
-                {(currentUserRole === 'owner' && member.role !== 'owner') && (
-                    <button
-                        onClick={() => handleRemoveMember(member.id)}
-                        className="opacity-0 group-hover:opacity-100 p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg transition-all"
-                        title="Rimuovi dal Team"
-                    >
-                        <Trash2 className="w-4 h-4" />
-                    </button>
-                )}
             </div>
-        ))}
-    </div>
-</div>
 
         </div >
     );

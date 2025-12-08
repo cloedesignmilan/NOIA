@@ -20,7 +20,7 @@ export default function SocialGeneratorPage() {
     const handleGenerate = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
-        setResult("");
+        setResult([]);
 
         try {
             const storedKey = localStorage.getItem('gemini_api_key');
