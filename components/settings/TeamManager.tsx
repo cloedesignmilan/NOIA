@@ -398,6 +398,6 @@ export function TeamManager() {
                 </div>
             </div>
 
-        </div >
+        </div>
     );
 }
