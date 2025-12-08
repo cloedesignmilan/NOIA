@@ -1,26 +1,151 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  /* --- PREMIUM LIGHT THEME --- */
+  --background: #F3F5F7;
+  /* Soft cool gray background, not pure white */
+  --foreground: #0F172A;
+  /* Slate 900 */
+
+  --card: #FFFFFF;
+  --card-foreground: #0F172A;
+
+  --popover: #FFFFFF;
+  --popover-foreground: #0F172A;
+
+  /* Vibrant Blue (iOS Like) */
+  --primary: #2563EB;
+  /* Blue 600 */
+  --primary-foreground: #FFFFFF;
+
+  --secondary: #F1F5F9;
+  /* Slate 100 */
+  --secondary-foreground: #1E293B;
+  /* Slate 800 */
+
+  --muted: #F8FAFC;
+  --muted-foreground: #64748B;
+  /* Slate 500 */
+
+  --accent: #F1F5F9;
+  --accent-foreground: #1E293B;
+
+  --destructive: #EF4444;
+  /* Red 500 */
+  --destructive-foreground: #FFFFFF;
+
+  --border: #E2E8F0;
+  /* Slate 200 */
+  --input: #E2E8F0;
+  --ring: #2563EB;
+}
+
+.dark {
+  /* --- PREMIUM DARK THEME --- */
+  --background: #000000;
+  /* Pure Black or nice deep gray */
+  --foreground: #F8FAFC;
+
+  --card: #1C1C1E;
+  /* Apple System Gray 6 equivalent */
+  --card-foreground: #FFFFFF;
+
+  --popover: #1C1C1E;
+  --popover-foreground: #FFFFFF;
+
+  /* Electric Blue for Dark Mode */
+  --primary: #3B82F6;
+  /* Blue 500 */
+  --primary-foreground: #FFFFFF;
+
+  --secondary: #2C2C2E;
+  /* System Gray 5 */
+  --secondary-foreground: #F8FAFC;
+
+  --muted: #2C2C2E;
+  --muted-foreground: #94A3B8;
+
+  --accent: #2C2C2E;
+  --accent-foreground: #F8FAFC;
+
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+
+  --border: #2C2C2E;
+  --input: #2C2C2E;
+  --ring: #3B82F6;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground antialiased transition-colors duration-300 selection:bg-primary/20;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02";
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+
+  /* Glassmorphism */
+  .glass {
+    @apply bg-white/70 dark:bg-black/60 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-sm;
+  }
+
+  .glass-card {
+    @apply bg-card/80 backdrop-blur-md border border-border/50 shadow-sm rounded-3xl hover:shadow-lg transition-all duration-300;
+  }
+
+  /* Widget Colors */
+  .widget-orange {
+    @apply bg-gradient-to-br from-orange-400 to-orange-600 text-white shadow-orange-500/20 shadow-lg;
+  }
+
+  .widget-blue {
+    @apply bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-blue-500/20 shadow-lg;
+  }
+
+  .widget-green {
+    @apply bg-gradient-to-br from-emerald-400 to-emerald-600 text-white shadow-emerald-500/20 shadow-lg;
+  }
+
+  .widget-red {
+    @apply bg-gradient-to-br from-rose-500 to-red-600 text-white shadow-rose-500/20 shadow-lg;
+  }
+
+  .widget-dark {
+    @apply bg-[#1C1C1E] text-white border border-white/10;
+  }
+
+  /* Premium Inputs */
+  .input-premium {
+    @apply h-12 rounded-2xl border-transparent bg-secondary text-foreground px-4 font-medium transition-all focus:bg-background focus:border-primary/50 focus:ring-4 focus:ring-primary/10 placeholder:text-muted-foreground/70;
+  }
+
+  /* Premium Buttons */
+  .btn-primary {
+    @apply h-12 px-6 rounded-xl bg-primary text-white font-semibold shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:scale-[1.02] active:scale-[0.98] transition-all;
+  }
 }

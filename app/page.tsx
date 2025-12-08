@@ -1,65 +1,235 @@
-import Image from "next/image";
+import { ArrowRight, CheckCircle2, TrendingUp, ShieldCheck, Zap, Sparkles, PenTool, Share2, Layout } from 'lucide-react';
+import Link from 'next/link';
+import Image from 'next/image';
 
-export default function Home() {
+export default function LandingPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
+      {/* Header */}
+      <header className="w-full py-6 px-4 sm:px-6 lg:px-8 border-b border-border/40 glass sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+              <span className="text-primary-foreground font-bold text-sm">NO</span>
+            </div>
+            <span className="text-xl font-bold tracking-tight">NO.IA</span>
+          </div>
+          <div className="flex gap-4">
+            <Link href="/login" className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              Accedi
+            </Link>
+            <Link href="/register" className="px-4 py-2 text-sm font-bold bg-primary text-primary-foreground rounded-xl shadow-lg shadow-primary/25 hover:bg-primary/90 transition-all">
+              Inizia Gratis
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      <main className="flex-1">
+        {/* Hero Section - High Conversion */}
+        <section className="relative py-20 sm:py-32 px-4 text-center space-y-8 max-w-5xl mx-auto overflow-hidden">
+          {/* Background Decor Elements */}
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl -z-10 animate-pulse"></div>
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl -z-10"></div>
+
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-4 animate-in fade-in slide-in-from-bottom-4 duration-500 border border-primary/20">
+            <Sparkles className="w-3 h-3" />
+            Creato da Agenti, Per Agenti
+          </div>
+
+          <h1 className="text-5xl sm:text-7xl font-black tracking-tight text-foreground animate-in fade-in slide-in-from-bottom-8 duration-700 leading-[1.1]">
+            Il Primo Software Gestionale <br className="hidden sm:block" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-600 to-pink-600">Creato da Agenti Immobiliari.</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-12 duration-1000 leading-relaxed">
+            Smetti di perdere tempo con fogli Excel.
+            NO.IA unisce <span className="text-foreground font-bold">Gestione Finanziaria</span>, <span className="text-foreground font-bold">Analisi Team</span> e <span className="text-foreground font-bold">Controllo Costi</span> in un'unica suite potente e intuitiva.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8 animate-in fade-in slide-in-from-bottom-16 duration-1000">
+            <Link href="/register" className="w-full sm:w-auto px-8 py-4 text-lg font-bold bg-primary text-primary-foreground rounded-2xl shadow-xl shadow-primary/30 hover:bg-primary/90 hover:scale-105 transition-all flex items-center justify-center gap-2">
+              <Zap className="w-5 h-5 fill-current" /> Prova Gratuitamente
+            </Link>
+            <Link href="#features" className="w-full sm:w-auto px-8 py-4 text-lg font-medium bg-card border border-border rounded-2xl hover:bg-muted transition-colors flex items-center justify-center gap-2">
+              Scopri di Più <ArrowRight className="w-4 h-4 ml-1" />
+            </Link>
+          </div>
+
+          <div className="pt-12 flex items-center justify-center gap-8 text-sm text-muted-foreground animate-in fade-in duration-1000 delay-500">
+            <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500" /> Nessuna Carta Richiesta</div>
+            <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500" /> Setup in 30 secondi</div>
+          </div>
+          {/* Hero Image */}
+          <div className="mt-16 relative w-full max-w-6xl mx-auto animate-in fade-in zoom-in duration-1000 delay-200">
+            <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent z-10 h-20 bottom-0 w-full" />
+            <div className="rounded-3xl border border-border/50 shadow-2xl overflow-hidden bg-card/50 backdrop-blur-sm ring-1 ring-white/10">
+              <Image
+                src="/showcase/dashboard-hero.png"
+                alt="NO.IA Dashboard"
+                width={1200}
+                height={800}
+                className="w-full h-auto object-cover"
+                priority
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Feature Grid: Finance & Management */}
+        <section id="features" className="py-24">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              <div className="space-y-8">
+                <h2 className="text-3xl sm:text-4xl font-black tracking-tight">Finanza & Controllo <br />Sotto Controllo.</h2>
+                <p className="text-lg text-muted-foreground">
+                  Non basta vendere, bisogna gestire. NO.IA ti offre una dashboard finanziaria completa per tracciare ogni singolo euro della tua agenzia.
+                </p>
+
+                <div className="space-y-6">
+                  <div className="flex gap-4">
+                    <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <TrendingUp className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-lg">Pianificazione Entrate</h4>
+                      <p className="text-muted-foreground text-sm">Traccia provvigioni, preliminari e rogiti futuri.</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-4">
+                    <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <ShieldCheck className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-lg">KPI Finanziari</h4>
+                      <p className="text-muted-foreground text-sm">Analisi costi/ricavi in tempo reale.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-primary to-purple-600 blur-3xl opacity-20 transform rotate-6 group-hover:opacity-30 transition-opacity duration-700"></div>
+                <div className="relative rounded-2xl overflow-hidden border border-border/50 shadow-2xl bg-black/50 backdrop-blur-sm">
+                  <Image
+                    src="/showcase/expenses-analytics.png"
+                    alt="Dashboard Finanziaria"
+                    width={800}
+                    height={600}
+                    className="w-full h-auto object-cover opacity-90 hover:opacity-100 transition-opacity duration-500"
+                  />
+                  <div className="absolute -bottom-10 -right-10 w-2/3 shadow-2xl border border-white/10 rounded-xl overflow-hidden hidden lg:block transform group-hover:-translate-y-2 group-hover:-translate-x-2 transition-transform duration-500">
+                    <Image
+                      src="/showcase/transactions-table.png"
+                      alt="Tabella Transazioni"
+                      width={600}
+                      height={400}
+                      className="w-full h-auto object-cover"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Feature Grid: Team Management */}
+        <section className="py-24 bg-gradient-to-t from-background to-muted/20 border-t border-border/50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              <div className="order-2 lg:order-1 relative group">
+                <div className="absolute inset-0 bg-gradient-to-l from-orange-400 to-yellow-600 blur-3xl opacity-20 transform -rotate-6 group-hover:opacity-30 transition-opacity duration-700"></div>
+                <div className="relative rounded-2xl overflow-hidden border border-border/50 shadow-2xl bg-black/50 backdrop-blur-sm">
+                  <Image
+                    src="/showcase/agent-list.png"
+                    alt="Lista Agenti"
+                    width={800}
+                    height={600}
+                    className="w-full h-auto object-cover opacity-90 hover:opacity-100 transition-opacity duration-500"
+                  />
+                  <div className="absolute -top-10 -left-10 w-2/3 shadow-2xl border border-white/10 rounded-xl overflow-hidden hidden lg:block transform group-hover:translate-y-2 group-hover:translate-x-2 transition-transform duration-500">
+                    <Image
+                      src="/showcase/agent-performance.png"
+                      alt="Performance Agenti"
+                      width={600}
+                      height={400}
+                      className="w-full h-auto object-cover"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="order-1 lg:order-2 space-y-8">
+                <h2 className="text-3xl sm:text-4xl font-black tracking-tight">Il Tuo Team al <br />Top della Forma.</h2>
+                <p className="text-lg text-muted-foreground">
+                  Gestisci collaboratori, dipendenti e soci con trasparenza totale. Calcola automaticamente split, provvigioni e monitora chi performa meglio.
+                </p>
+
+                <div className="space-y-6">
+                  <div className="flex gap-4">
+                    <div className="w-10 h-10 bg-orange-100 dark:bg-orange-900/30 text-orange-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <TrendingUp className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-lg">Classifiche Live</h4>
+                      <p className="text-muted-foreground text-sm">Leaderboard in tempo reale basata su fatturato e vendite.</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-4">
+                    <div className="w-10 h-10 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Zap className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-lg">Calcolo Provvigionale</h4>
+                      <p className="text-muted-foreground text-sm">Automazione completa da entrate a compensi netti.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        {/* Pricing CTA */}
+        <section className="py-20 px-4 text-center bg-muted/20">
+          <div className="card-premium max-w-5xl mx-auto p-12 bg-gradient-to-br from-primary via-indigo-600 to-purple-700 text-white border-none shadow-2xl relative overflow-hidden">
+            {/* Texture overlay */}
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+
+            <div className="relative z-10">
+              <h2 className="text-3xl sm:text-5xl font-black mb-6">Il futuro del Real Estate è qui.</h2>
+              <p className="text-lg text-white/90 mb-10 max-w-2xl mx-auto font-medium">
+                Unisciti alla rivoluzione. Risparmia 20 ore a settimana e chiudi più contratti con l'aiuto dell'Intelligenza Artificiale.
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <Link href="/register" className="px-10 py-5 text-xl font-bold bg-white text-primary rounded-2xl shadow-xl hover:bg-white/95 hover:scale-105 transition-all text-primary">
+                  Inizia la Prova Gratuita
+                </Link>
+              </div>
+              <div className="mt-8 flex items-center justify-center gap-6 text-sm text-white/70 font-medium">
+                <span className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4" /> 14 Giorni Gratis</span>
+                <span className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4" /> Disdici quando vuoi</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer className="py-12 bg-card border-t border-border/40">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+              <span className="text-primary-foreground font-bold text-sm">NO</span>
+            </div>
+            <span className="text-xl font-bold tracking-tight">NO.IA</span>
+          </div>
+          <p className="text-muted-foreground text-sm">
+            © 2025 NO.IA Finance. <br />
+            Made with ❤️ by Real Estate Agents for Real Estate Agents.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </footer>
     </div>
   );
 }
