@@ -12,9 +12,6 @@ export function Navbar() {
     const pathname = usePathname();
     const [user, setUser] = useState<any>(null);
 
-    // Hide Navbar on Landing Page (it has its own Header)
-    if (pathname === '/') return null;
-
     useEffect(() => {
         supabase.auth.getUser().then(({ data: { user } }) => {
             setUser(user);
@@ -35,6 +32,8 @@ export function Navbar() {
         // { href: '/marketing', label: 'Marketing AI', icon: Megaphone },
         { href: '/settings', label: 'Impostazioni', icon: Settings },
     ];
+
+    if (pathname === '/') return null;
 
     return (
         <nav className="sticky top-0 z-50 w-full glass border-b border-border/40">
