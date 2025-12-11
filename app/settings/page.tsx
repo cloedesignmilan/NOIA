@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/auth'; // Using auth lib client
+import { supabase } from '@/lib/supabase'; // Shared client
 import { Loader2, Save, Building, FileText, CheckCircle2 } from 'lucide-react';
 import { CategoryManager } from '@/components/settings/CategoryManager';
 import { TeamManager } from '@/components/settings/TeamManager';
