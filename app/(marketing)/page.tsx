@@ -1,4 +1,4 @@
-import { ArrowRight, CheckCircle2, TrendingUp, ShieldCheck, Zap, Sparkles, PenTool, Share2, Layout } from 'lucide-react';
+import { ArrowRight, CheckCircle2, TrendingUp, ShieldCheck, Zap, Sparkles, PenTool, Share2, Layout, ScanLine } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -189,6 +189,66 @@ export default function LandingPage() {
             </div>
           </div>
 
+        </section>
+
+        {/* Feature Grid: Smart Scan AI (NEW) */}
+        <section className="py-24 bg-gradient-to-b from-background to-emerald-500/5">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              <div className="space-y-8">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 text-xs font-bold uppercase tracking-wider mb-2">
+                  <Sparkles className="w-3 h-3" />
+                  Novità AI
+                </div>
+                <h2 className="text-3xl sm:text-4xl font-black tracking-tight">Smart Scan AI: <br />Addio Inserimento Manuale.</h2>
+                <p className="text-lg text-muted-foreground">
+                  Fai una foto allo scontrino e l'Intelligenza Artificiale farà il resto.
+                  NO.IA legge automaticamente data, importo e fornitore in meno di 2 secondi.
+                </p>
+
+                <div className="space-y-6">
+                  <div className="flex gap-4">
+                    <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Zap className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-lg">Zero Errori</h4>
+                      <p className="text-muted-foreground text-sm">L'IA non sbaglia a trascrivere le cifre, tu sì (soprattutto dopo 8 ore di lavoro).</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-4">
+                    <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 text-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <TrendingUp className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-lg">Categorizzazione Automatica</h4>
+                      <p className="text-muted-foreground text-sm">Il sistema riconosce se è benzina, pranzo o marketing e lo archivia correttamente.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-teal-400 blur-3xl opacity-20 transform -rotate-3 group-hover:opacity-30 transition-opacity duration-700"></div>
+                <div className="relative rounded-2xl overflow-hidden border border-border/50 shadow-2xl bg-black/50 backdrop-blur-sm p-2">
+                  {/* Placeholder for receipt scan demo - using a generic finance image for now if specific one implies creating it, or reuse existing style */}
+                  <div className="bg-zinc-900 rounded-xl overflow-hidden aspect-video flex items-center justify-center border border-white/5 relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent"></div>
+                    <div className="text-center space-y-4">
+                      <div className="mx-auto w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center animate-pulse">
+                        <ScanLine className="w-8 h-8 text-emerald-500" />
+                      </div>
+                      <p className="text-sm font-medium text-emerald-200">Analisi Scontrino in corso...</p>
+                      <div className="w-48 h-12 bg-white/5 rounded-lg mx-auto flex items-center px-4 gap-3 border border-white/10">
+                        <div className="w-8 h-8 rounded bg-white/10"></div>
+                        <div className="h-2 w-20 bg-white/10 rounded"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* Pricing CTA */}

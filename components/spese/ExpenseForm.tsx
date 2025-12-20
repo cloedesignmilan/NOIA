@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { X, Check, Euro, Receipt, Tag, Calendar, ScanLine, Loader2, Users, Building2, Megaphone, Laptop, Car, Scale, AlertCircle, Pencil, Trash2, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/lib/supabase';
@@ -26,6 +26,8 @@ const EXPENSE_MACROS = [
 export function ExpenseForm({ isOpen, onClose, onSuccess, initialData }: ExpenseFormProps) {
     const { orgId, loading: orgLoading } = useCurrentOrg();
     const [isLoading, setIsLoading] = useState(false);
+    const [isScanning, setIsScanning] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Form State
     const [amount, setAmount] = useState('');
@@ -134,6 +136,54 @@ export function ExpenseForm({ isOpen, onClose, onSuccess, initialData }: Expense
             setCategory('');
         }
     }, [isOpen, initialData, categoriesList]);
+
+
+    // --- Smart Scan Handler ---
+    const triggerFileInput = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setIsScanning(true);
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            const res = await fetch('/api/analyze-receipt', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!res.ok) throw new Error("Scan Failed");
+
+            const data = await res.json();
+
+            // Auto-fill form
+            if (data.amount) setAmount(data.amount.toString());
+            if (data.date) setDate(data.date);
+            if (data.description) setDescription(data.description);
+            // Optional: Try to match category if model returns one
+            if (data.category) {
+                // Heuristic mapping or just set description
+                const lowerCat = data.category.toLowerCase();
+                if (lowerCat.includes("benzina") || lowerCat.includes("carburante")) setMacroCategory('trasporti');
+                if (lowerCat.includes("ristorante") || lowerCat.includes("pranzo")) setMacroCategory('personale');
+                if (lowerCat.includes("marketing") || lowerCat.includes("facebook") || lowerCat.includes("google")) setMacroCategory('marketing');
+                // ... add more heuristics as needed
+            }
+
+        } catch (err) {
+            console.error(err);
+            alert("Errore nella scansione dello scontrino. Riprova o inserisci manualmente.");
+        } finally {
+            setIsScanning(false);
+            // Reset input
+            if (fileInputRef.current) fileInputRef.current.value = "";
+        }
+    };
 
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -331,9 +381,31 @@ export function ExpenseForm({ isOpen, onClose, onSuccess, initialData }: Expense
                             </div>
                             {/* OCR Placeholder */}
                             <div className="flex-1 space-y-2">
-                                <label className="text-xs font-bold uppercase text-muted-foreground ml-1">Allegato</label>
-                                <button type="button" className="w-full h-[42px] border border-dashed border-border rounded-xl flex items-center justify-center text-xs font-medium text-muted-foreground hover:bg-muted/50">
-                                    <ScanLine className="w-4 h-4 mr-2" /> Scansiona
+                                <label className="text-xs font-bold uppercase text-muted-foreground ml-1">Smart Scan AI (BETA)</label>
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    className="hidden"
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={triggerFileInput}
+                                    disabled={isScanning}
+                                    className="w-full h-[42px] border border-dashed border-primary/50 bg-primary/5 rounded-xl flex items-center justify-center text-xs font-bold text-primary hover:bg-primary/10 transition-all relative overflow-hidden"
+                                >
+                                    {isScanning ? (
+                                        <>
+                                            <div className="absolute inset-0 bg-white/50 animate-pulse" />
+                                            <Loader2 className="w-4 h-4 mr-2 animate-spin relative z-10" />
+                                            <span className="relative z-10">Analisi...</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <ScanLine className="w-4 h-4 mr-2" /> Scansiona Scontrino
+                                        </>
+                                    )}
                                 </button>
                             </div>
                         </div>
@@ -343,7 +415,7 @@ export function ExpenseForm({ isOpen, onClose, onSuccess, initialData }: Expense
 
                 <div className="p-6 border-t border-border/50 bg-background/50 flex gap-4">
                     <button type="button" onClick={onClose} className="flex-1 py-3 text-sm font-bold text-muted-foreground hover:bg-muted/50 rounded-xl transition-colors">Annulla</button>
-                    <button type="button" onClick={handleSubmit} disabled={isLoading} className="flex-[2] btn-primary py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 bg-foreground text-background hover:bg-foreground/90">
+                    <button type="button" onClick={handleSubmit} disabled={isLoading || isScanning} className="flex-[2] btn-primary py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 bg-foreground text-background hover:bg-foreground/90">
                         {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <>Salva Spesa <ArrowRight className="w-4 h-4" /></>}
                     </button>
                 </div>
