@@ -228,8 +228,6 @@ export function ExpenseForm({ isOpen, onClose, onSuccess, initialData }: Expense
                 // ... add more heuristics as needed
             }
 
-        } catch (err) {
-            console.error(err);
         } catch (err: any) {
             console.error(err);
             // Show exact error from server for debugging
