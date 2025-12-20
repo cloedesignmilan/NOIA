@@ -56,13 +56,21 @@ export async function POST(req: Request) {
 
     } catch (error: any) {
         console.error("Receipt Analysis Failed:", error);
-        // Log more details for debugging
-        if (error.message) console.error("Error Message:", error.message);
-        if (error.status) console.error("Error Status:", error.status);
+
+        let errorMessage = error.message || "Unknown error";
+        let status = 500;
+
+        // Smart handling for Rate Limits
+        if (errorMessage.includes("429") || errorMessage.includes("Too Many Requests")) {
+            errorMessage = "Il sistema AI è momentaneamente occupato. Riprova tra 30 secondi.";
+            status = 429;
+        }
 
         return NextResponse.json(
-            { error: "Failed to analyze receipt", details: error.message || "Unknown error" },
-            { status: 500 }
+            { error: "Analysis Failed", details: errorMessage },
+            { status: status }
         );
     }
 }
+
+
