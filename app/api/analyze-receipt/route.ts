@@ -56,8 +56,12 @@ export async function POST(req: Request) {
 
     } catch (error: any) {
         console.error("Receipt Analysis Failed:", error);
+        // Log more details for debugging
+        if (error.message) console.error("Error Message:", error.message);
+        if (error.status) console.error("Error Status:", error.status);
+
         return NextResponse.json(
-            { error: "Failed to analyze receipt", details: error.message },
+            { error: "Failed to analyze receipt", details: error.message || "Unknown error" },
             { status: 500 }
         );
     }

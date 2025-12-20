@@ -138,7 +138,7 @@ export function ExpenseForm({ isOpen, onClose, onSuccess, initialData }: Expense
     }, [isOpen, initialData, categoriesList]);
 
 
-    // --- Smart Scan Handler ---
+    // --- Smart Scan Handler (with compression) ---
     const triggerFileInput = () => {
         fileInputRef.current?.click();
     };
@@ -148,16 +148,69 @@ export function ExpenseForm({ isOpen, onClose, onSuccess, initialData }: Expense
         if (!file) return;
 
         setIsScanning(true);
-        const formData = new FormData();
-        formData.append("file", file);
 
         try {
+            // 1. Client-side compression/resize to avoid 4.5MB Vercel limit
+            const compressedFile = await new Promise<File>((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target?.result as string;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        // Resize logic: max dimension 1500px (plenty for OCR)
+                        const MAX_WIDTH = 1500;
+                        const MAX_HEIGHT = 1500;
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > height) {
+                            if (width > MAX_WIDTH) {
+                                height *= MAX_WIDTH / width;
+                                width = MAX_WIDTH;
+                            }
+                        } else {
+                            if (height > MAX_HEIGHT) {
+                                width *= MAX_HEIGHT / height;
+                                height = MAX_HEIGHT;
+                            }
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx?.drawImage(img, 0, 0, width, height);
+
+                        // Compress to JPEG 0.7 quality
+                        canvas.toBlob((blob) => {
+                            if (blob) {
+                                resolve(new File([blob], file.name, { type: 'image/jpeg' }));
+                            } else {
+                                reject(new Error("Compression failed"));
+                            }
+                        }, 'image/jpeg', 0.7);
+                    };
+                    img.onerror = error => reject(error);
+                };
+                reader.onerror = error => reject(error);
+            });
+
+            // 2. Upload compressed file
+            const formData = new FormData();
+            formData.append("file", compressedFile);
+
+            console.log("Original size:", (file.size / 1024 / 1024).toFixed(2), "MB");
+            console.log("Compressed size:", (compressedFile.size / 1024 / 1024).toFixed(2), "MB");
+
             const res = await fetch('/api/analyze-receipt', {
                 method: 'POST',
                 body: formData
             });
 
-            if (!res.ok) throw new Error("Scan Failed");
+            if (!res.ok) {
+                const errData = await res.json();
+                throw new Error(errData.details || "Server Error during scan");
+            }
 
             const data = await res.json();
 
