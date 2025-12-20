@@ -5,7 +5,8 @@ import { Plus, Search, TrendingDown, Filter, Loader2, Pencil, Trash2, Eye, FileT
 import { ExpenseForm } from '@/components/spese/ExpenseForm';
 import { supabase } from '@/lib/supabase';
 import { useCurrentOrg } from '@/lib/hooks';
-import { cn } from '@/lib/utils';
+import { cn, getDateRange } from '@/lib/utils';
+import { exportTableToPDF } from '@/lib/pdf-generator';
 import { CategoryPieChart } from '@/components/charts/CategoryPieChart';
 import { TrendChart } from '@/components/charts/TrendChart';
 
@@ -76,15 +77,12 @@ export default function SpesePage() {
         let filtered = transactions;
 
         // Date Filter
-        const now = new Date();
-        const startOfRange = new Date();
-        if (dateRange === 'month') startOfRange.setMonth(now.getMonth(), 1);
-        if (dateRange === 'quarter') startOfRange.setMonth(now.getMonth() - 2, 1);
-        if (dateRange === 'year') startOfRange.setFullYear(now.getFullYear(), 0, 1);
-        if (dateRange === 'all') startOfRange.setFullYear(2000, 0, 1);
-        startOfRange.setHours(0, 0, 0, 0);
+        const { from, to } = getDateRange(dateRange);
 
-        filtered = filtered.filter(t => new Date(t.date) >= startOfRange);
+        filtered = filtered.filter(t => {
+            const d = new Date(t.date);
+            return d >= from && d <= to;
+        });
 
         // Category Filter
         if (filterCategory !== 'all') {
@@ -161,6 +159,27 @@ export default function SpesePage() {
     }, [filteredTransactions]);
 
 
+    const handleExportPDF = () => {
+        if (!filteredTransactions.length) return alert("Nessun dato da esportare.");
+
+        const columns = ["Data", "Descrizione", "Categoria", "Importo", "IVA", "Stato"];
+        const rows = filteredTransactions.map(t => [
+            new Date(t.date).toLocaleDateString('it-IT'),
+            t.description || '-',
+            t.category || '-',
+            `€ ${Math.abs(t.amount || 0).toLocaleString('it-IT', { minimumFractionDigits: 2 })}`,
+            t.vat_amount ? `€ ${Math.abs(t.vat_amount).toLocaleString('it-IT', { minimumFractionDigits: 2 })}` : '-',
+            t.status === 'paid' ? 'Pagato' : 'Da Saldare'
+        ]);
+
+        exportTableToPDF(
+            `Report Spese (${dateRange.toUpperCase()})`,
+            columns,
+            rows,
+            `spese_${dateRange}_${new Date().getTime()}.pdf`
+        );
+    };
+
     return (
         <div className="space-y-8 animate-in fade-in duration-500 pb-20">
             {/* Header & Controls */}
@@ -175,25 +194,37 @@ export default function SpesePage() {
                     <p className="text-muted-foreground font-medium mt-1">Monitoraggio costi e uscite aziendali.</p>
                 </div>
 
-                <div className="flex items-center gap-2 bg-muted/50 p-1.5 rounded-xl border border-border/50">
-                    {(['month', 'quarter', 'year', 'all'] as const).map((r) => (
-                        <button
-                            key={r}
-                            onClick={() => setDateRange(r)}
-                            className={cn(
-                                "px-3 py-1.5 text-xs font-bold rounded-lg transition-all capitalize",
-                                dateRange === r
-                                    ? "bg-background text-primary shadow-sm ring-1 ring-border"
-                                    : "text-muted-foreground hover:bg-background/50 hover:text-foreground"
-                            )}
-                        >
-                            {r === 'month' && 'Mese'}
-                            {r === 'quarter' && 'Trimestre'}
-                            {r === 'year' && 'Anno'}
-                            {r === 'all' && 'Tutto'}
-                        </button>
-                    ))}
+                <div className="flex flex-col sm:flex-row items-end gap-4">
+                    <button
+                        onClick={handleExportPDF}
+                        className="btn-secondary h-[42px] px-4 flex items-center gap-2 text-muted-foreground hover:text-foreground border border-border/50 bg-background hover:bg-muted/50 transition-all rounded-xl"
+                        title="Esporta PDF"
+                    >
+                        <FileText className="w-4 h-4" />
+                        <span className="hidden sm:inline text-xs font-bold uppercase">PDF</span>
+                    </button>
+
+                    <div className="flex items-center gap-2 bg-muted/50 p-1.5 rounded-xl border border-border/50">
+                        {(['month', 'quarter', 'year', 'all'] as const).map((r) => (
+                            <button
+                                key={r}
+                                onClick={() => setDateRange(r)}
+                                className={cn(
+                                    "px-3 py-1.5 text-xs font-bold rounded-lg transition-all capitalize",
+                                    dateRange === r
+                                        ? "bg-background text-primary shadow-sm ring-1 ring-border"
+                                        : "text-muted-foreground hover:bg-background/50 hover:text-foreground"
+                                )}
+                            >
+                                {r === 'month' && 'Mese'}
+                                {r === 'quarter' && 'Trimestre'}
+                                {r === 'year' && 'Anno'}
+                                {r === 'all' && 'Tutto'}
+                            </button>
+                        ))}
+                    </div>
                 </div>
+
             </div>
 
             {/* KPI Cards */}

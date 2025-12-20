@@ -163,8 +163,25 @@ export function ExpenseForm({ isOpen, onClose, onSuccess, initialData }: Expense
 
             if (initialData?.id) {
                 await supabase.from('transactions').update(payload).eq('id', initialData.id);
+
+                // --- CHECK AND UPDATE PARENT TRANSACTION ---
+                // If this is a commission split payment (has related_transaction_id), 
+                // sync the status back to the parent income transaction.
+                if (initialData.related_transaction_id) {
+                    const newCommStatus = status === 'paid' ? 'paid' : 'accrued';
+
+                    await supabase
+                        .from('transactions')
+                        .update({ agent_commission_status: newCommStatus })
+                        .eq('id', initialData.related_transaction_id);
+                }
+
             } else {
-                await supabase.from('transactions').insert(payload);
+                const { data: newExp, error } = await supabase.from('transactions').insert(payload).select().single();
+                if (error) throw error;
+                // Cannot have related_id on pure insert via ExpenseForm usually, 
+                // but if manual linking ever happens:
+                // if (payload.related_transaction_id) ... 
             }
 
             if (onSuccess) onSuccess();

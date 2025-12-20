@@ -6,7 +6,7 @@ import { supabase } from '@/lib/supabase';
 import { useCurrentOrg } from '@/lib/hooks';
 import Link from 'next/link';
 import { CategoryPieChart } from '@/components/charts/CategoryPieChart';
-import { cn } from '@/lib/utils';
+import { cn, getDateRange } from '@/lib/utils';
 
 export default function AgentsPage() {
     const { orgId } = useCurrentOrg();
@@ -202,21 +202,16 @@ export default function AgentsPage() {
         if (!agents.length) return []; // Return empty if no agents
 
         // Date Filter Setup
-        const now = new Date();
-        const startOfRange = new Date();
-        if (dateRange === 'month') startOfRange.setMonth(now.getMonth(), 1);
-        if (dateRange === 'quarter') startOfRange.setMonth(now.getMonth() - 2, 1);
-        if (dateRange === 'year') startOfRange.setFullYear(now.getFullYear(), 0, 1);
-        if (dateRange === 'all') startOfRange.setFullYear(2000, 0, 1);
-        startOfRange.setHours(0, 0, 0, 0);
+        const { from, to } = getDateRange(dateRange);
 
         return agents.map(agent => {
             // 1. Deals where they are the SPLIT agent (Collaborator)
-            const agentDeals = transactions.filter(t =>
-                t.type === 'income' &&
-                t.split_agent === agent.id &&
-                new Date(t.date) >= startOfRange
-            );
+            const agentDeals = transactions.filter(t => {
+                const d = new Date(t.date);
+                return t.type === 'income' &&
+                    t.split_agent === agent.id &&
+                    d >= from && d <= to;
+            });
 
             // Total Revenue
             const totalRevenue = agentDeals.reduce((sum, t) => {
@@ -233,10 +228,11 @@ export default function AgentsPage() {
             }, 0);
 
             // Assignments Count
-            const myAssignments = assignments.filter(a =>
-                a.agent_id === agent.id &&
-                new Date(a.assignment_date || a.created_at) >= startOfRange
-            );
+            const myAssignments = assignments.filter(a => {
+                const d = new Date(a.assignment_date || a.created_at);
+                return a.agent_id === agent.id &&
+                    d >= from && d <= to;
+            });
 
             return {
                 ...agent,

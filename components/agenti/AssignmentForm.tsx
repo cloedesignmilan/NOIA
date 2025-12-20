@@ -11,10 +11,11 @@ interface AssignmentFormProps {
     onClose: () => void;
     onSuccess: () => void;
     agentId: string;
+    agent?: any; // Full agent object for commission calculation
     initialData?: any; // For editing in future
 }
 
-export function AssignmentForm({ isOpen, onClose, onSuccess, agentId, initialData }: AssignmentFormProps) {
+export function AssignmentForm({ isOpen, onClose, onSuccess, agentId, agent, initialData }: AssignmentFormProps) {
     const { orgId } = useCurrentOrg();
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
@@ -91,6 +92,55 @@ export function AssignmentForm({ isOpen, onClose, onSuccess, agentId, initialDat
 
                 if (error) throw error;
             }
+
+            // --- AUTO-GENERATE TRANSACTION ---
+            // Trigger if:
+            // 1. Status BECAME 'closed_won' (isNewClose)
+            // 2. OR Status IS 'closed_won' AND Realized Value changed (Retroactive Fix)
+            const isNewClose = formData.status === 'closed_won' && (initialData?.status !== 'closed_won');
+            const isRetroactiveFix = formData.status === 'closed_won' &&
+                initialData?.status === 'closed_won' &&
+                (formData.realized_value !== initialData.realized_value ||
+                    formData.agreed_commission_percentage !== initialData.agreed_commission_percentage);
+
+            if ((isNewClose || isRetroactiveFix) && agent) {
+                const realizVal = parseFloat(formData.realized_value) || 0;
+                const agreedPct = parseFloat(formData.agreed_commission_percentage) || 0;
+                const agencyFee = realizVal * (agreedPct / 100);
+
+                const agentBase = agent.base_commission_percentage || 0;
+                const agentComm = agencyFee * (agentBase / 100);
+
+                // Create Transaction
+                // Check if one already exists for this deal to avoid duplicates? 
+                // Difficult without linking key. 
+                // For now, simpler: Allow creating it. Usually retroactive fix is because it's missing.
+                if (agencyFee > 0) {
+                    const { error: txError } = await supabase
+                        .from('transactions')
+                        .insert([{
+                            organization_id: orgId,
+                            agent_id: agentId,
+                            type: 'income',
+                            amount: agencyFee,
+                            date: formData.end_date || formData.acquisition_date || new Date().toISOString(),
+                            description: `Provvigione: ${formData.title}`,
+                            category: 'Intermediazione - Vendita',
+                            status: 'pending', // Da Incassare
+                            agent_commission_accrued: agentComm,
+                            agent_commission_status: 'accrued'
+                        }]);
+
+                    if (txError) {
+                        console.error("Error creating auto-transaction:", txError);
+                        // Don't fail the whole save, just log
+                        alert("Attenzione: Incarico salvato ma errore nella creazione della transazione finanziaria.");
+                    } else {
+                        if (isRetroactiveFix) alert("Transazione finanziaria generata con i nuovi valori!");
+                    }
+                }
+            }
+            // ---------------------------------
 
             onSuccess();
             onClose();

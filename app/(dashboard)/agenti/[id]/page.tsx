@@ -2,11 +2,12 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { notFound, useParams } from 'next/navigation';
-import { ArrowUpRight, CheckCircle2, Clock, Filter, LayoutDashboard, MapPin, Phone, TrendingUp, User, PieChart, Target, CalendarDays, Wallet, BadgeEuro, ArrowRight, Trash2, Pencil } from 'lucide-react';
+import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { useCurrentOrg } from '@/lib/hooks';
-import { cn } from '@/lib/utils';
-import Link from 'next/link';
+import { cn, getDateRange } from '@/lib/utils';
+import { exportTableToPDF } from '@/lib/pdf-generator';
+import { ArrowUpRight, CheckCircle2, Clock, Filter, LayoutDashboard, MapPin, Phone, TrendingUp, User, PieChart, Target, CalendarDays, Wallet, BadgeEuro, ArrowRight, Trash2, Pencil, FileText } from 'lucide-react';
 import { TrendChart } from '@/components/charts/TrendChart';
 import { AssignmentForm } from '@/components/agenti/AssignmentForm';
 
@@ -75,20 +76,19 @@ export default function AgentDetailsPage() {
 
     // --- Computed Metrics based on Date Range ---
     const metrics = useMemo(() => {
-        const now = new Date();
-        const startOfRange = new Date();
-
-        if (dateRange === 'month') startOfRange.setMonth(now.getMonth(), 1);
-        if (dateRange === 'quarter') startOfRange.setMonth(now.getMonth() - 2, 1); // Approx
-        if (dateRange === 'year') startOfRange.setFullYear(now.getFullYear(), 0, 1);
-        if (dateRange === 'all') startOfRange.setFullYear(2000, 0, 1);
-        startOfRange.setHours(0, 0, 0, 0);
+        const { from, to } = getDateRange(dateRange);
 
         // Filter Transactions
-        const filteredTransactions = allTransactions.filter(t => new Date(t.date) >= startOfRange);
+        const filteredTransactions = allTransactions.filter(t => {
+            const d = new Date(t.date);
+            return d >= from && d <= to;
+        });
 
         // Filter Assignments (by acquisition date)
-        const filteredAssignments = allAssignments.filter(a => new Date(a.acquisition_date) >= startOfRange);
+        const filteredAssignments = allAssignments.filter(a => {
+            const d = new Date(a.acquisition_date);
+            return d >= from && d <= to;
+        });
 
         // KPI Calculations
         const totalRevenue = filteredTransactions.reduce((acc, t) => acc + (t.amount || 0), 0);
@@ -134,6 +134,27 @@ export default function AgentDetailsPage() {
             filteredTransactions // For chart
         };
     }, [allTransactions, allAssignments, dateRange, agent]);
+
+    const handleExportPDF = () => {
+        if (!metrics.filteredTransactions.length) return alert("Nessun dato da esportare.");
+
+        const columns = ["Data", "Descrizione", "Categoria", "Importo", "Comm. Maturata", "Stato Comm."];
+        const rows = metrics.filteredTransactions.map(t => [
+            new Date(t.date).toLocaleDateString('it-IT'),
+            t.description || '-',
+            t.category || '-',
+            `€ ${Math.abs(t.amount || 0).toLocaleString('it-IT', { minimumFractionDigits: 2 })}`,
+            `€ ${t.agent_commission_accrued?.toLocaleString('it-IT', { minimumFractionDigits: 2 })}`,
+            t.agent_commission_status === 'paid' ? 'Pagata' : 'Da Liquidare'
+        ]);
+
+        exportTableToPDF(
+            `Report: ${agent?.first_name} ${agent?.last_name} (${dateRange.toUpperCase()})`,
+            columns,
+            rows,
+            `agente_${agent?.last_name}_${dateRange}.pdf`
+        );
+    };
 
 
     // --- Chart Data Preparation ---
@@ -231,7 +252,19 @@ export default function AgentDetailsPage() {
                     </div>
                 </div>
 
-                {/* Global Date Filter */}
+            </div>
+
+            {/* Global Date Filter */}
+            <div className="flex flex-col sm:flex-row items-end gap-3 actions-toolbar">
+                <button
+                    onClick={handleExportPDF}
+                    className="btn-secondary h-[42px] px-4 flex items-center gap-2 text-muted-foreground hover:text-foreground border border-border/50 bg-background hover:bg-muted/50 transition-all rounded-xl"
+                    title="Esporta PDF"
+                >
+                    <FileText className="w-4 h-4" />
+                    <span className="hidden sm:inline text-xs font-bold uppercase">PDF</span>
+                </button>
+
                 <div className="flex items-center gap-2 bg-muted/50 p-1.5 rounded-xl border border-border/50">
                     {(['month', 'quarter', 'year', 'all'] as const).map((r) => (
                         <button
@@ -473,6 +506,7 @@ export default function AgentDetailsPage() {
                 isOpen={isAssignmentFormOpen}
                 onClose={() => setIsAssignmentFormOpen(false)}
                 onSuccess={() => { fetchData(); setIsAssignmentFormOpen(false); }}
+                agent={agent}
                 agentId={id}
                 initialData={selectedAssignment}
             />

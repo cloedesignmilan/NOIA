@@ -274,10 +274,27 @@ export function CommissionForm({ isOpen, onClose, onSuccess, initialData, readOn
         const desc = `${finalCategory} - ${propertyAddr} ${clientName ? `(${clientName})` : ''}`;
 
         // Prepare Income Payload
+        const incomeVal = parseFloat(amount) || 0;
+        let agentCommission = 0;
+        let agentIdToLink = null;
+
+        if (hasSplit && splitAgent) {
+            const pct = parseFloat(splitPercentage) || 0;
+            agentCommission = (Math.abs(incomeVal) * pct) / 100;
+            agentIdToLink = splitAgent;
+        }
+
+        console.log("Saving Transaction:", {
+            hasSplit, splitAgent, splitPercentage,
+            agentIdToLink, agentCommission
+        });
+
+
+
         const incomePayload = {
             organization_id: orgId,
             type: 'income',
-            amount: parseFloat(amount),
+            amount: incomeVal,
             vat_amount: vatAmount,
             withholding_tax: withholdingTax,
             date: date,
@@ -287,6 +304,10 @@ export function CommissionForm({ isOpen, onClose, onSuccess, initialData, readOn
             invoice_number: hasInvoice ? invoiceNum : null,
             split_agent: hasSplit ? splitAgent : null, // We still store string for reference
             split_percentage: hasSplit ? parseFloat(splitPercentage) : null,
+            // LINK TO AGENT
+            agent_id: agentIdToLink,
+            agent_commission_accrued: agentCommission,
+            agent_commission_status: 'accrued'
         };
 
         try {
@@ -317,7 +338,7 @@ export function CommissionForm({ isOpen, onClose, onSuccess, initialData, readOn
             if (!incomeId) throw new Error("No income ID returned");
 
             // 2. Handle Split Expense Logic
-            const incomeVal = parseFloat(amount) || 0; // Define incomeVal here for use in split logic
+            // incomeVal is already defined above
 
             // Check if an expense already links to this income (for Updates)
             const { data: existingExp } = await supabase
