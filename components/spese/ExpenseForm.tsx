@@ -230,7 +230,10 @@ export function ExpenseForm({ isOpen, onClose, onSuccess, initialData }: Expense
 
         } catch (err) {
             console.error(err);
-            alert("Errore nella scansione dello scontrino. Riprova o inserisci manualmente.");
+        } catch (err: any) {
+            console.error(err);
+            // Show exact error from server for debugging
+            alert(`Errore Scansione:\n${err.message || "Errore sconosciuto"}\n\nSe il problema persiste, controlla la connessione internet.`);
         } finally {
             setIsScanning(false);
             // Reset input
