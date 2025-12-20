@@ -38,7 +38,7 @@ export default function LandingPage() {
           </div>
 
           <h1 className="text-5xl sm:text-7xl font-black tracking-tight text-foreground animate-in fade-in slide-in-from-bottom-8 duration-700 leading-[1.1]">
-            Il Primo Software Gestionale <br className="hidden sm:block" />
+            Il Primo Software di Gestione finanziaria per la tua Agenzia Immobiliare <br className="hidden sm:block" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-600 to-pink-600">Creato da Agenti Immobiliari.</span>
           </h1>
 

@@ -190,7 +190,7 @@ export default function DashboardHome() {
                                 <TrendingUp className="w-6 h-6" />
                             </div>
                         </div>
-                        <p className="text-sm font-medium text-muted-foreground">Entrate (Nette)</p>
+                        <p className="text-sm font-medium text-muted-foreground">Entrate</p>
                         <h3 className="text-2xl font-bold text-foreground mt-1">{loading ? '...' : formatCurrency(stats.income)}</h3>
                     </div>
                 </Link>

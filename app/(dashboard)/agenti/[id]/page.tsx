@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from 'react';
-import { notFound, useParams } from 'next/navigation';
+import { notFound, useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { useCurrentOrg } from '@/lib/hooks';
@@ -15,9 +15,11 @@ type DateRange = 'month' | 'quarter' | 'year' | 'all';
 
 export default function AgentDetailsPage() {
     const params = useParams();
+    const router = useRouter();
     const id = params?.id as string;
     const { orgId } = useCurrentOrg();
     const [agent, setAgent] = useState<any>(null);
+    const [agentsList, setAgentsList] = useState<any[]>([]);
     const [dateRange, setDateRange] = useState<DateRange>('year');
 
     // Raw Data
@@ -66,6 +68,18 @@ export default function AgentDetailsPage() {
             .order('created_at', { ascending: false });
 
         if (assignmentData) setAllAssignments(assignmentData);
+
+        if (assignmentData) setAllAssignments(assignmentData);
+
+        // 4. Fetch All Agents (for Switcher)
+        const { data: allAgents } = await supabase
+            .from('agents')
+            .select('id, first_name, last_name')
+            .eq('organization_id', orgId)
+            .eq('active', true)
+            .order('first_name');
+
+        if (allAgents) setAgentsList(allAgents);
 
         setLoading(false);
     };
@@ -254,8 +268,26 @@ export default function AgentDetailsPage() {
 
             </div>
 
-            {/* Global Date Filter */}
+            {/* Global Date Filter & Switcher */}
             <div className="flex flex-col sm:flex-row items-end gap-3 actions-toolbar">
+                {/* Agent Switcher */}
+                <div className="relative">
+                    <select
+                        className="h-[42px] pl-3 pr-8 rounded-xl border border-border/50 bg-background hover:bg-muted/50 text-sm font-bold appearance-none cursor-pointer focus:ring-2 focus:ring-primary/20 outline-none"
+                        value={id}
+                        onChange={(e) => router.push(`/agenti/${e.target.value}`)}
+                    >
+                        {agentsList.map(a => (
+                            <option key={a.id} value={a.id}>
+                                {a.first_name} {a.last_name}
+                            </option>
+                        ))}
+                    </select>
+                    <User className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+                </div>
+
+                <div className="w-px h-6 bg-border/50 hidden sm:block mx-1" />
+
                 <button
                     onClick={handleExportPDF}
                     className="btn-secondary h-[42px] px-4 flex items-center gap-2 text-muted-foreground hover:text-foreground border border-border/50 bg-background hover:bg-muted/50 transition-all rounded-xl"
