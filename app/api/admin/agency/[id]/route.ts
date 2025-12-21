@@ -25,7 +25,8 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
             .from('profiles')
             .select('id')
             .eq('organization_id', id)
-            .eq('role', 'owner');
+            .eq('organization_id', id);
+        // .eq('role', 'owner'); // Delete ALL users in the agency, not just owners
 
         if (owners && owners.length > 0) {
             console.log(`[Admin] Found ${owners.length} owners to delete from Auth.`);
