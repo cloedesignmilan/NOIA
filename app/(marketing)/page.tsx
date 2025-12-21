@@ -1,4 +1,4 @@
-import { ArrowRight, CheckCircle2, TrendingUp, ShieldCheck, Zap, Sparkles, PenTool, Share2, Layout, ScanLine } from 'lucide-react';
+import { ArrowRight, CheckCircle2, TrendingUp, ShieldCheck, Zap, Sparkles, PenTool, Share2, Layout, ScanLine, XCircle } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -246,6 +246,72 @@ export default function LandingPage() {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Comparison Section: NO.IA vs Excel */}
+        <section className="py-24 bg-zinc-950">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16 space-y-4">
+              <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white mb-6">
+                Due modi di gestire la tua agenzia.<br />
+                <span className="text-muted-foreground text-2xl sm:text-4xl">Uno ti fa crescere. L’altro ti fa perdere tempo.</span>
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+              {/* Excel Card */}
+              <div className="rounded-3xl p-8 bg-zinc-900/50 border border-red-900/20 relative overflow-hidden group hover:border-red-900/40 transition-colors">
+                <div className="absolute top-0 right-0 p-32 bg-red-500/5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-red-500"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" /><polyline points="14 2 14 8 20 8" /><line x1="8" x2="16" y1="13" y2="13" /><line x1="8" x2="16" y1="17" y2="17" /><line x1="10" x2="8" y1="9" y2="9" /></svg>
+                  </div>
+                  <h3 className="text-2xl font-bold text-zinc-300">Excel / Fogli di Calcolo</h3>
+                </div>
+                <ul className="space-y-4">
+                  {[
+                    "Inserimento manuale (e errori inevitabili)",
+                    "File sparsi: “versione finale”, “finalissima”...",
+                    "Nessun flusso: entrate, spese, split… tutto a mano",
+                    "Report lenti: devi “lavorare sui numeri” per capire",
+                    "Difficile lavorare in team (condivisioni, caos)",
+                    "Dati vecchi: aggiornati solo se qualcuno ha voglia"
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3 text-zinc-400">
+                      <XCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* NO.IA Card */}
+              <div className="rounded-3xl p-8 bg-zinc-900 border border-primary/20 relative overflow-hidden ring-1 ring-primary/20 shadow-2xl shadow-primary/10">
+                <div className="absolute top-0 right-0 p-32 bg-primary/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-12 h-12 rounded-xl bg-primary text-primary-foreground flex items-center justify-center">
+                    <span className="font-bold text-lg">NO</span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-white">NO.IA Finance</h3>
+                </div>
+                <ul className="space-y-4">
+                  {[
+                    "Inserimento guidato + Smart Scan AI (zero errori)",
+                    "Tutto in un’unica dashboard: entrate, margini, scadenze",
+                    "Calcolo automatico split e provvigioni",
+                    "KPI e report pronti: sai subito come stai andando",
+                    "Collaborazione semplice: ognuno vede i suoi dati",
+                    "Numeri live: decisioni rapide, meno stress"
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3 text-zinc-100 font-medium">
+                      <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           </div>
