@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Building2, TrendingUp, TrendingDown, Wallet, Loader2, ArrowRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useRouter } from 'next/navigation';
+
 
 function formatEur(val: number) {
     return new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(val);
