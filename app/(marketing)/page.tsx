@@ -1,4 +1,4 @@
-import { ArrowRight, CheckCircle2, TrendingUp, ShieldCheck, Zap, Sparkles, PenTool, Share2, Layout, ScanLine, XCircle } from 'lucide-react';
+import { ArrowRight, CheckCircle2, TrendingUp, ShieldCheck, Zap, Sparkles, PenTool, Share2, Layout, ScanLine, XCircle, Database, Download } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -243,6 +243,66 @@ export default function LandingPage() {
                         <div className="w-8 h-8 rounded bg-white/10"></div>
                         <div className="h-2 w-20 bg-white/10 rounded"></div>
                       </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Feature Grid: Security & Backup */}
+        <section className="py-24 border-t border-border/50 bg-gradient-to-b from-background to-blue-500/5">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              <div className="order-2 lg:order-1 relative group">
+                <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 to-cyan-400 blur-3xl opacity-20 transform rotate-3 group-hover:opacity-30 transition-opacity duration-700"></div>
+                <div className="relative rounded-2xl overflow-hidden border border-border/50 shadow-2xl bg-black/50 backdrop-blur-sm p-8 flex items-center justify-center h-[400px]">
+                  <div className="text-center space-y-6 w-full max-w-sm relative z-10">
+                    <div className="w-24 h-24 bg-blue-500/20 rounded-2xl flex items-center justify-center mx-auto ring-1 ring-blue-500/50 shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform duration-500">
+                      <Database className="w-12 h-12 text-blue-400" />
+                    </div>
+                    <div className="space-y-3 bg-zinc-900/80 p-6 rounded-xl border border-white/5 backdrop-blur-md">
+                      <div className="flex justify-between text-xs text-blue-300 font-mono mb-2">
+                        <span>backup_agenzia.json</span>
+                        <span>100%</span>
+                      </div>
+                      <div className="h-2 bg-blue-950 rounded-full w-full overflow-hidden">
+                        <div className="h-full bg-blue-500 w-full animate-pulse shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
+                      </div>
+                      <p className="text-xs text-muted-foreground pt-2">Ultimo salvataggio: Ora</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="order-1 lg:order-2 space-y-8">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 text-xs font-bold uppercase tracking-wider mb-2">
+                  <ShieldCheck className="w-3 h-3" />
+                  Sicurezza Totale
+                </div>
+                <h2 className="text-3xl sm:text-4xl font-black tracking-tight">I Dati sono Tuoi.<br />Non nostri.</h2>
+                <p className="text-lg text-muted-foreground">
+                  Crediamo nella sovranità dei dati. Scarica un backup completo della tua agenzia quando vuoi e ripristinalo in un click.
+                </p>
+
+                <div className="space-y-6">
+                  <div className="flex gap-4">
+                    <div className="w-10 h-10 bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Download className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-lg">Download Istantaneo</h4>
+                      <p className="text-muted-foreground text-sm">Esporta tutto in formato JSON. Clienti, transazioni, note: tutto.</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-4">
+                    <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 text-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Layout className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-lg">Ripristino "Time Machine"</h4>
+                      <p className="text-muted-foreground text-sm">Hai sbagliato qualcosa? Ricarica un backup precedente e riparti da zero.</p>
                     </div>
                   </div>
                 </div>
