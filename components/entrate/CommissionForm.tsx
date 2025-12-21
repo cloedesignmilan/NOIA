@@ -131,7 +131,8 @@ export function CommissionForm({ isOpen, onClose, onSuccess, initialData, readOn
                     .select('invoice_number')
                     .eq('organization_id', orgId)
                     .ilike('invoice_number', `%${yearSuffix}`)
-                    .order('invoice_number', { ascending: false });
+                    .order('invoice_number', { ascending: false })
+                    .limit(1);
 
                 if (error) {
                     console.error("Error fetching invoices:", error);

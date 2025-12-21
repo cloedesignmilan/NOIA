@@ -7,6 +7,7 @@ import { LayoutDashboard, TrendingUp, TrendingDown, Settings, LogOut, Users, Meg
 import { cn } from '@/lib/utils';
 import { supabase } from '@/lib/supabase';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { AgencySwitcher } from '@/components/layout/AgencySwitcher';
 
 export function Navbar() {
     const pathname = usePathname();
@@ -41,12 +42,14 @@ export function Navbar() {
                 <div className="flex justify-between h-16 items-center">
                     {/* Logo */}
                     <div className="flex items-center gap-8">
-                        <Link href={user ? "/dashboard" : "/"} className="flex-shrink-0 flex items-center gap-2 group">
+                        <Link href={user ? "/dashboard" : "/"} className="flex-shrink-0 flex items-center gap-2 group mr-4">
                             <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20 transition-transform group-hover:scale-105">
                                 <span className="text-primary-foreground font-bold text-sm">NO</span>
                             </div>
-                            <span className="text-xl font-bold tracking-tight text-foreground">NO.IA</span>
+                            <span className="text-xl font-bold tracking-tight text-foreground hidden sm:block">NO.IA</span>
                         </Link>
+
+                        {user && <AgencySwitcher />}
 
                         {/* Desktop Nav */}
                         {user && (
