@@ -20,7 +20,23 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
 
         console.log(`[Admin] Deleting Agency ID: ${id}`);
 
-        // 1. Delete Organization (Cascades to profiles, clients, etc.)
+        // 1. Get Owner ID(s)
+        const { data: owners, error: ownerError } = await supabaseAdmin
+            .from('profiles')
+            .select('id')
+            .eq('organization_id', id)
+            .eq('role', 'owner');
+
+        if (owners && owners.length > 0) {
+            console.log(`[Admin] Found ${owners.length} owners to delete from Auth.`);
+            for (const owner of owners) {
+                const { error: deleteParam } = await supabaseAdmin.auth.admin.deleteUser(owner.id);
+                if (deleteParam) console.error(`Failed to delete user ${owner.id}:`, deleteParam);
+                else console.log(`Deleted user ${owner.id} from Auth.`);
+            }
+        }
+
+        // 2. Delete Organization (Cascades to profiles, clients, etc.)
         const { error: deleteError } = await supabaseAdmin
             .from('organizations')
             .delete()
