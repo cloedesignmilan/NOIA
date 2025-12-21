@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase'; // Shared client
 import { Loader2, Save, Building, FileText, CheckCircle2 } from 'lucide-react';
 import { CategoryManager } from '@/components/settings/CategoryManager';
 import { TeamManager } from '@/components/settings/TeamManager';
+import { BackupManager } from '@/components/settings/BackupManager';
 
 export default function SettingsPage() {
     const [isLoading, setIsLoading] = useState(true);
@@ -320,6 +321,7 @@ export default function SettingsPage() {
 
             <TeamManager />
             <CategoryManager />
+            <BackupManager />
         </div>
     );
 }

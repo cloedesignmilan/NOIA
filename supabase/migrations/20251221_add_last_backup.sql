@@ -1,0 +1,1 @@
+ALTER TABLE agency_settings ADD COLUMN IF NOT EXISTS last_backup_at TIMESTAMP WITH TIME ZONE;
