@@ -71,8 +71,8 @@ export default function GlobalDashboardPage() {
             const { data: transactions } = await supabase
                 .from('transactions')
                 .select('amount, type, organization_id')
-                .in('organization_id', orgIds)
-                .eq('status', 'paid'); // Only settled finances
+                .in('organization_id', orgIds);
+            // Removed .eq('status', 'paid') to show ALL volume (paid + pending)
 
             const agencies: AgencyStats[] = orgs.map(org => {
                 const orgTrans = transactions?.filter(t => t.organization_id === org.id) || [];
