@@ -432,6 +432,64 @@ export default function LandingPage() {
           </div>
         </section>
 
+        {/* Pricing Section */}
+        <section id="pricing" className="py-24 border-t border-border/50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16 space-y-4">
+              <h2 className="text-3xl sm:text-5xl font-black tracking-tight">Scegli la tua crescita.</h2>
+              <p className="text-lg text-muted-foreground">Piani flessibili per ogni fase della tua agenzia.</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              {/* Starter */}
+              <div className="p-8 rounded-3xl border border-border bg-card/50 flex flex-col hover:border-border/80 transition-all">
+                <h3 className="text-xl font-bold mb-2">Starter</h3>
+                <div className="text-4xl font-black mb-6">Gratis<span className="text-sm font-medium text-muted-foreground">/sempre</span></div>
+                <p className="text-sm text-muted-foreground mb-8">Per agenti individuali che iniziano a tracciare le proprie finanze.</p>
+                <div className="space-y-4 flex-1">
+                  <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> 1 Utente</div>
+                  <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> Dashboard Base</div>
+                  <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> Fino a 50 transazioni/mese</div>
+                </div>
+                <Link href="/register" className="mt-8 w-full py-3 rounded-xl border border-border font-bold hover:bg-muted transition-colors text-center">Inizia</Link>
+              </div>
+
+              {/* Pro */}
+              <div className="p-8 rounded-3xl border border-primary/50 bg-card relative flex flex-col transform md:-translate-y-4 shadow-2xl shadow-primary/10">
+                <div className="absolute top-0 center w-full text-center -mt-3">
+                  <span className="bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Più Popolare</span>
+                </div>
+                <h3 className="text-xl font-bold mb-2 text-primary">Pro</h3>
+                <div className="text-4xl font-black mb-6">€29<span className="text-sm font-medium text-muted-foreground">/mese</span></div>
+                <p className="text-sm text-muted-foreground mb-8">Per agenzie strutturate che vogliono scalare.</p>
+                <div className="space-y-4 flex-1">
+                  <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> Team Illimitati</div>
+                  <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> Smart Scan AI (OCR)</div>
+                  <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> Calcolo Provvigioni Avanzato</div>
+                  <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> Export Commercialista</div>
+                </div>
+                <Link href="/register?plan=pro" className="mt-8 w-full py-3 rounded-xl bg-primary text-primary-foreground font-bold hover:bg-primary/90 transition-colors text-center shadow-lg shadow-primary/25">Prova Gratis</Link>
+              </div>
+
+              {/* Elite */}
+              <div className="p-8 rounded-3xl border border-border bg-gradient-to-b from-card to-purple-500/5 flex flex-col relative overflow-hidden group">
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none"></div>
+                <h3 className="text-xl font-bold mb-2 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">Elite</h3>
+                <div className="text-4xl font-black mb-6">€99<span className="text-sm font-medium text-muted-foreground">/mese</span></div>
+                <p className="text-sm text-muted-foreground mb-8">Per gruppi immobiliari e network multi-agenzia.</p>
+                <div className="space-y-4 flex-1 relative z-10">
+                  <div className="flex items-center gap-3 text-sm font-bold"><CheckCircle2 className="w-4 h-4 text-purple-500" /> Tutto incluso nel Pro</div>
+                  <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-purple-500" /> <span className="font-bold text-foreground">Multi-Agenzia</span> (Nuovo)</div>
+                  <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-purple-500" /> <span className="font-bold text-foreground">Dashboard Globale</span></div>
+                  <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-purple-500" /> Gestione Illimitata Sedi</div>
+                  <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-purple-500" /> Supporto Dedicato 24/7</div>
+                </div>
+                <Link href="/register?plan=elite" className="mt-8 w-full py-3 rounded-xl border border-purple-500/30 bg-purple-500/10 text-purple-500 font-bold hover:bg-purple-500 hover:text-white transition-all text-center">Contatta Vendite</Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Pricing CTA */}
         <section className="py-20 px-4 text-center bg-muted/20">
           <div className="card-premium max-w-5xl mx-auto p-12 bg-gradient-to-br from-primary via-indigo-600 to-purple-700 text-white border-none shadow-2xl relative overflow-hidden">
