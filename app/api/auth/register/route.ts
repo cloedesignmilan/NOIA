@@ -4,6 +4,9 @@ import { NextResponse } from 'next/server';
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
+    let createdUserId: string | null = null;
+    let createdOrgId: string | null = null;
+
     try {
         const { email, password, agencyName, fullName } = await req.json();
 
@@ -18,13 +21,14 @@ export async function POST(req: Request) {
 
         if (authError) {
             console.error("Admin CreateUser Error:", authError);
-            throw authError;
+            throw authError; // No rollback needed yet
         }
 
         const user = authData.user;
         if (!user) throw new Error("User creation failed (no data)");
 
-        console.log(`[REGISTER] User created: ${user.id}, Confirmed At: ${user.email_confirmed_at}`);
+        createdUserId = user.id; // Mark for potential rollback
+        console.log(`[REGISTER] User created: ${user.id}`);
 
         // 2. Create Organization
         const { data: orgData, error: orgError } = await supabaseAdmin
@@ -34,6 +38,7 @@ export async function POST(req: Request) {
             .single();
 
         if (orgError) throw new Error(`Org Creation Failed: ${orgError.message}`);
+        createdOrgId = orgData.id; // Could rollback org too if needed, but cascade might handle user
 
         // 3. Create Profile
         const { error: profileError } = await supabaseAdmin
@@ -49,16 +54,30 @@ export async function POST(req: Request) {
         if (profileError) throw new Error(`Profile Creation Failed: ${profileError.message}`);
 
         // 4. Create Settings (Force Onboarding)
-        await supabaseAdmin.from('agency_settings').insert([{
+        const { error: settingsError } = await supabaseAdmin.from('agency_settings').insert([{
             organization_id: orgData.id,
             agency_name: agencyName,
             onboarding_completed: false
         }]);
 
+        if (settingsError) throw new Error(`Settings Creation Failed: ${settingsError.message}`);
+
         return NextResponse.json({ success: true, user });
 
     } catch (error: any) {
         console.error("Registration API Error:", error);
+
+        // ROLLBACK
+        if (createdUserId) {
+            console.warn(`[ROLLBACK] Deleting user ${createdUserId} due to failure...`);
+            await supabaseAdmin.auth.admin.deleteUser(createdUserId);
+            // If we created an org, we might want to delete it too, but user deletion cascades usually? 
+            // Or orphaned orgs are less critical than zombie users.
+            if (createdOrgId) {
+                await supabaseAdmin.from('organizations').delete().eq('id', createdOrgId);
+            }
+        }
+
         return NextResponse.json({ error: error.message || "Registration failed" }, { status: 500 });
     }
 }
