@@ -359,13 +359,13 @@ export function ExpenseForm({ isOpen, onClose, onSuccess, initialData }: Expense
                                     key={m.id}
                                     type="button"
                                     onClick={() => setMacroCategory(m.id)}
+                                    title={m.label}
                                     className={cn(
-                                        "flex-1 min-w-[80px] py-2 px-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex flex-col items-center gap-1",
-                                        macroCategory === m.id ? "bg-background text-foreground shadow-sm ring-1 ring-border/50" : "text-muted-foreground hover:text-foreground/80"
+                                        "flex-1 min-w-[50px] py-3 px-2 rounded-xl text-xs font-bold transition-all flex flex-col items-center justify-center gap-1",
+                                        macroCategory === m.id ? "bg-background text-foreground shadow-sm ring-1 ring-border/50" : "text-muted-foreground hover:text-foreground/80 hover:bg-white/10"
                                     )}
                                 >
-                                    <m.icon className="w-4 h-4 opacity-70" />
-                                    <span>{m.label}</span>
+                                    <m.icon className="w-5 h-5 opacity-90" />
                                 </button>
                             ))}
                         </div>

@@ -1,30 +1,30 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { Plus, Pencil, Trash2, Check, X, Loader2, FolderOpen, ArrowUp, ArrowDown } from 'lucide-react';
+import { Plus, Pencil, Trash2, Check, X, Loader2, FolderOpen, ArrowUp, ArrowDown, Users, Building2, Megaphone, Laptop, Car, Scale, Receipt, Landmark, BookOpen, AlertCircle, Handshake, Briefcase, TrendingUp, Layers } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useCurrentOrg } from '@/lib/hooks';
 import { cn } from '@/lib/utils';
 
 // Shared Macros (should match the ones in Forms)
 const INCOME_MACROS = [
-    { id: 'intermediazione', label: 'Intermediazione' },
-    { id: 'servizi', label: 'Servizi' },
-    { id: 'flusso', label: 'Flusso' },
-    { id: 'altro', label: 'Altro' },
+    { id: 'intermediazione', label: 'Intermediazione', icon: Handshake },
+    { id: 'servizi', label: 'Servizi', icon: Briefcase },
+    { id: 'flusso', label: 'Flusso', icon: TrendingUp },
+    { id: 'altro', label: 'Altro', icon: Layers },
 ];
 
 const EXPENSE_MACROS = [
-    { id: 'personale', label: 'Costi per agenti e collaboratori' },
-    { id: 'ufficio', label: 'Costi di ufficio' },
-    { id: 'marketing', label: 'Marketing & pubblicità' },
-    { id: 'trasporti', label: 'Trasporti & trasferte' },
-    { id: 'tecnologia', label: 'Software & strumenti digitali' },
-    { id: 'consulenze', label: 'Consulenze & professionisti' },
-    { id: 'amministrativi', label: 'Costi amministrativi' },
-    { id: 'fisco', label: 'Imposte e tributi' },
-    { id: 'formazione', label: 'Formazione & crescita' },
-    { id: 'varie', label: 'Altre spese' },
+    { id: 'personale', label: 'Costi per agenti e collaboratori', icon: Users },
+    { id: 'ufficio', label: 'Costi di ufficio', icon: Building2 },
+    { id: 'marketing', label: 'Marketing & pubblicità', icon: Megaphone },
+    { id: 'trasporti', label: 'Trasporti & trasferte', icon: Car },
+    { id: 'tecnologia', label: 'Software & strumenti digitali', icon: Laptop },
+    { id: 'consulenze', label: 'Consulenze & professionisti', icon: Scale },
+    { id: 'amministrativi', label: 'Costi amministrativi', icon: Receipt },
+    { id: 'fisco', label: 'Imposte e tributi', icon: Landmark },
+    { id: 'formazione', label: 'Formazione & crescita', icon: BookOpen },
+    { id: 'varie', label: 'Altre spese', icon: AlertCircle },
 ];
 
 export function CategoryManager() {
@@ -218,19 +218,21 @@ export function CategoryManager() {
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 {/* Macro List */}
-                <div className="md:col-span-1 flex flex-row md:flex-col gap-2 overflow-x-auto pb-2 md:pb-0">
+                <div className="md:col-span-1 flex flex-row md:grid md:grid-cols-2 gap-2 overflow-x-auto pb-2 md:pb-0">
                     {currentMacros.map(m => (
                         <button
                             key={m.id}
                             onClick={() => setSelectedMacro(m.id)}
+                            title={m.label}
                             className={cn(
-                                "text-left px-4 py-3 rounded-xl text-sm font-bold transition-all whitespace-nowrap",
+                                "flex flex-col items-center justify-center p-3 rounded-xl transition-all aspect-square",
                                 selectedMacro === m.id
                                     ? "bg-primary/10 text-primary border border-primary/20"
-                                    : "hover:bg-muted text-muted-foreground"
+                                    : "bg-muted/30 hover:bg-muted text-muted-foreground"
                             )}
                         >
-                            {m.label}
+                            <span className="sr-only">{m.label}</span>
+                            <m.icon className="w-6 h-6 opacity-80" />
                         </button>
                     ))}
                 </div>
