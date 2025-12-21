@@ -1,17 +1,17 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { Plus, Pencil, Trash2, Check, X, Loader2, FolderOpen, ArrowUp, ArrowDown, Users, Building2, Megaphone, Laptop, Car, Scale, Receipt, Landmark, BookOpen, AlertCircle, Handshake, Briefcase, TrendingUp, Layers } from 'lucide-react';
+import { Plus, Pencil, Trash2, Check, X, Loader2, FolderOpen, ArrowUp, ArrowDown, Users, Building2, Megaphone, Laptop, Car, Scale, Receipt, Landmark, BookOpen, AlertCircle, Handshake, Briefcase, TrendingUp, Layers, Home, PlusCircle } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useCurrentOrg } from '@/lib/hooks';
 import { cn } from '@/lib/utils';
 
 // Shared Macros (should match the ones in Forms)
 const INCOME_MACROS = [
-    { id: 'intermediazione', label: 'Intermediazione', icon: Handshake },
-    { id: 'servizi', label: 'Servizi', icon: Briefcase },
-    { id: 'flusso', label: 'Flusso', icon: TrendingUp },
-    { id: 'altro', label: 'Altro', icon: Layers },
+    { id: 'provvigioni', label: 'Provvigioni immobiliari', icon: Home },
+    { id: 'collaborazioni', label: 'Collaborazioni & segnalazioni', icon: Handshake },
+    { id: 'servizi', label: 'Servizi accessori', icon: Briefcase },
+    { id: 'extra', label: 'Extra / altri ricavi', icon: PlusCircle },
 ];
 
 const EXPENSE_MACROS = [

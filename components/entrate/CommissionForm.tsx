@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import {
-    X, Check, Euro, Home, FileText, Tag, Loader2, Calendar,
+    X, Check, Euro, Home, FileText, Tag, Loader2, Calendar, Handshake, PlusCircle,
     Pencil, Trash2, ArrowRight
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -18,10 +18,10 @@ interface CommissionFormProps {
 }
 
 const INCOME_MACROS = [
-    { id: 'intermediazione', label: 'Intermediazione', icon: Home },
-    { id: 'servizi', label: 'Servizi', icon: FileText },
-    { id: 'flusso', label: 'Flusso', icon: Euro },
-    { id: 'altro', label: 'Altro', icon: Tag },
+    { id: 'provvigioni', label: 'Provvigioni immobiliari', icon: Home },
+    { id: 'collaborazioni', label: 'Collaborazioni & segnalazioni', icon: Handshake },
+    { id: 'servizi', label: 'Servizi accessori', icon: FileText },
+    { id: 'extra', label: 'Extra / altri ricavi', icon: PlusCircle },
 ];
 
 export function CommissionForm({ isOpen, onClose, onSuccess, initialData, readOnly = false }: CommissionFormProps) {
@@ -34,7 +34,7 @@ export function CommissionForm({ isOpen, onClose, onSuccess, initialData, readOn
     const [status, setStatus] = useState('pending');
 
     // Category
-    const [macroCategory, setMacroCategory] = useState('intermediazione');
+    const [macroCategory, setMacroCategory] = useState('provvigioni');
     const [category, setCategory] = useState('');
 
     // Details
@@ -205,7 +205,7 @@ export function CommissionForm({ isOpen, onClose, onSuccess, initialData, readOn
 
             // Category Parsing (Simpler Logic)
             const currentCat = initialData.category || '';
-            let foundMacro = 'intermediazione';
+            let foundMacro = 'provvigioni';
 
             // Try to match macro based on known keywords or list
             const match = categoriesList.find(c => c.name === currentCat);
@@ -250,7 +250,7 @@ export function CommissionForm({ isOpen, onClose, onSuccess, initialData, readOn
             setApplyWithholding(false);
             setDate(new Date().toISOString().split('T')[0]);
             setStatus('pending');
-            setMacroCategory('intermediazione');
+            setMacroCategory('provvigioni');
             setCategory('');
             setClientName('');
             setPropertyAddr('');
@@ -534,12 +534,13 @@ export function CommissionForm({ isOpen, onClose, onSuccess, initialData, readOn
                                         key={m.id}
                                         type="button"
                                         onClick={() => setMacroCategory(m.id)}
+                                        title={m.label}
                                         className={cn(
-                                            "flex-1 py-2 px-3 rounded-xl text-xs font-bold whitespace-nowrap transition-all",
-                                            macroCategory === m.id ? "bg-background text-primary shadow-sm" : "text-muted-foreground hover:text-foreground"
+                                            "flex-1 min-w-[50px] py-3 px-2 rounded-xl text-xs font-bold transition-all flex flex-col items-center justify-center gap-1",
+                                            macroCategory === m.id ? "bg-background text-primary shadow-sm" : "text-muted-foreground hover:text-foreground hover:bg-white/10"
                                         )}
                                     >
-                                        {m.label}
+                                        <m.icon className="w-5 h-5 opacity-90" />
                                     </button>
                                 ))}
                             </div>

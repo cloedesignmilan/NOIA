@@ -64,11 +64,29 @@ export async function POST(req: Request) {
 
         // 5. Seed Default Categories (Entrate & Uscite)
         const defaultCategories = [
-            // INCOME (Entrate)
-            { section: 'income', macro_category: 'intermediazione', name: '1.1 Comm. Vendita', sort_order: 10 },
-            { section: 'income', macro_category: 'intermediazione', name: '1.2 Comm. Locazione', sort_order: 20 },
-            { section: 'income', macro_category: 'servizi', name: '2.1 Consulenza', sort_order: 30 },
-            { section: 'income', macro_category: 'servizi', name: '2.2 Gestione Affitti', sort_order: 40 },
+            // INCOME (Categories: Ricavi)
+            // 1. Provvigioni
+            { section: 'income', macro_category: 'provvigioni', name: 'Provvigioni vendite immobili', sort_order: 10 },
+            { section: 'income', macro_category: 'provvigioni', name: 'Provvigioni locazioni', sort_order: 11 },
+            { section: 'income', macro_category: 'provvigioni', name: 'Provvigioni affitti turistici', sort_order: 12 },
+            { section: 'income', macro_category: 'provvigioni', name: 'Provvigioni affitti di azienda', sort_order: 13 },
+
+            // 2. Collaborazioni
+            { section: 'income', macro_category: 'collaborazioni', name: 'Provvigioni da collaborazione inter-agenzia', sort_order: 20 },
+            { section: 'income', macro_category: 'collaborazioni', name: 'Segnalazioni clienti', sort_order: 21 },
+            { section: 'income', macro_category: 'collaborazioni', name: 'Referral attivi', sort_order: 22 },
+
+            // 3. Servizi
+            { section: 'income', macro_category: 'servizi', name: 'Consulenze immobiliari', sort_order: 30 },
+            { section: 'income', macro_category: 'servizi', name: 'Valutazioni immobili', sort_order: 31 },
+            { section: 'income', macro_category: 'servizi', name: 'Property management', sort_order: 32 },
+            { section: 'income', macro_category: 'servizi', name: 'Gestione affitti', sort_order: 33 },
+            { section: 'income', macro_category: 'servizi', name: 'Servizi post-vendita', sort_order: 34 },
+
+            // 4. Extra
+            { section: 'income', macro_category: 'extra', name: 'Rimborsi spese ricevuti', sort_order: 40 },
+            { section: 'income', macro_category: 'extra', name: 'Bonus / incentivi', sort_order: 41 },
+            { section: 'income', macro_category: 'extra', name: 'Altri ricavi', sort_order: 42 },
 
             // EXPENSE (Spese - Detailed)
             // 1. Personale (Agenti & Collaboratori)
