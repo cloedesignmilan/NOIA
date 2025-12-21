@@ -144,25 +144,36 @@ export default function AdminDashboardClient() {
                                     <th className="px-4 py-3">Data Iscrizione</th>
                                     <th className="px-4 py-3">Piano</th>
                                     <th className="px-4 py-3">Stato</th>
-                                    <th className="px-4 py-3">Fine Prova</th>
+                                    <th className="px-4 py-3">Attività</th>
+                                    <th className="px-4 py-3">Ultimo Inserimento</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-border/50">
                                 {orgs.map((org: any) => (
                                     <tr key={org.id} className="hover:bg-muted/10 transition-colors">
-                                        <td className="px-4 py-3 font-medium">{org.name || 'N/A'}</td>
+                                        <td className="px-4 py-3 font-medium">
+                                            {org.name || 'N/A'}
+                                            <div className="text-xs text-muted-foreground">{org.email}</div>
+                                        </td>
                                         <td className="px-4 py-3 text-muted-foreground">{new Date(org.created_at).toLocaleDateString()}</td>
                                         <td className="px-4 py-3 capitalize">{org.plan_tier}</td>
                                         <td className="px-4 py-3">
                                             <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-bold ${org.subscription_status === 'active' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' :
-                                                    org.subscription_status === 'trial' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' :
-                                                        'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                                                org.subscription_status === 'trial' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' :
+                                                    'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
                                                 }`}>
                                                 {org.subscription_status}
                                             </span>
                                         </td>
-                                        <td className="px-4 py-3 text-muted-foreground">
-                                            {org.trial_ends_at ? new Date(org.trial_ends_at).toLocaleDateString() : '-'}
+                                        <td className="px-4 py-3">
+                                            <div className="font-medium">{org.transaction_count || 0} op.</div>
+                                        </td>
+                                        <td className="px-4 py-3 text-muted-foreground text-xs">
+                                            {org.last_active ? (
+                                                <span className={new Date().getTime() - new Date(org.last_active).getTime() < 86400000 ? "text-emerald-500 font-bold" : ""}>
+                                                    {new Date(org.last_active).toLocaleString()}
+                                                </span>
+                                            ) : 'Mai'}
                                         </td>
                                     </tr>
                                 ))}

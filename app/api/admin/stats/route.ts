@@ -36,11 +36,32 @@ export async function GET(req: Request) {
         const { data: orgs, error } = await supabaseAdmin
             .from('organizations')
             .select('*')
+            .select('*')
             .order('created_at', { ascending: false });
 
         if (error) throw error;
 
-        return NextResponse.json({ orgs });
+        // 4. Fetch Activity Stats (Transactions)
+        // Optimization: Select only needed fields to keep payload light
+        const { data: transactions, error: txError } = await supabaseAdmin
+            .from('transactions')
+            .select('organization_id, created_at');
+
+        if (txError) console.error("Error fetching transactions:", txError);
+
+        // 5. Aggregate Stats
+        const orgStats = (orgs || []).map((org: any) => {
+            const orgTxs = (transactions || []).filter((t: any) => t.organization_id === org.id);
+            const lastTx = orgTxs.sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];
+
+            return {
+                ...org,
+                transaction_count: orgTxs.length,
+                last_active: lastTx ? lastTx.created_at : null
+            };
+        });
+
+        return NextResponse.json({ orgs: orgStats });
 
     } catch (error: any) {
         console.error("Admin API Error:", error);
