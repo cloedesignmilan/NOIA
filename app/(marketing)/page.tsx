@@ -251,6 +251,61 @@ export default function LandingPage() {
           </div>
         </section>
 
+        {/* Mobile App Section (New) */}
+        <section className="py-24 relative overflow-hidden">
+          {/* Background Radial Gradient */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/20 rounded-full blur-[120px] -z-10"></div>
+
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16 space-y-4">
+              <h2 className="text-3xl sm:text-5xl font-black tracking-tight">Portalo sempre con te.</h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                La tua agenzia non si ferma mai, nemmeno NO.IA.
+                Accedi a statistiche, entrate e spese direttamente dal tuo iPhone, ovunque tu sia.
+              </p>
+            </div>
+
+            <div className="relative flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
+
+              {/* iPhone Portrait Mockup */}
+              <div className="relative z-20 transform md:translate-y-12 hover:-translate-y-4 transition-transform duration-500">
+                <div className="relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px] shadow-xl">
+                  <div className="h-[32px] w-[3px] bg-gray-800 absolute -start-[17px] top-[72px] rounded-s-lg"></div>
+                  <div className="h-[46px] w-[3px] bg-gray-800 absolute -start-[17px] top-[124px] rounded-s-lg"></div>
+                  <div className="h-[46px] w-[3px] bg-gray-800 absolute -start-[17px] top-[178px] rounded-s-lg"></div>
+                  <div className="h-[64px] w-[3px] bg-gray-800 absolute -end-[17px] top-[142px] rounded-e-lg"></div>
+                  <div className="rounded-[2rem] overflow-hidden w-[272px] h-[572px] bg-white dark:bg-gray-800">
+                    <Image
+                      src="/mobile-portrait.png"
+                      alt="NO.IA su iPhone"
+                      width={272}
+                      height={572}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* iPhone Landscape Mockup */}
+              <div className="relative z-10 hidden md:block transform hover:scale-105 transition-transform duration-500">
+                <div className="relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[12px] rounded-[2.5rem] h-[300px] w-[600px] shadow-xl">
+                  <div className="h-[3px] w-[32px] bg-gray-800 absolute left-1/2 -translate-x-1/2 -top-[15px] rounded-b-lg"></div>
+                  <div className="rounded-[2rem] overflow-hidden w-[576px] h-[276px] bg-white dark:bg-gray-800">
+                    <Image
+                      src="/mobile-landscape.png"
+                      alt="NO.IA Landscape Dashboard"
+                      width={576}
+                      height={276}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
         {/* Pricing CTA */}
         <section className="py-20 px-4 text-center bg-muted/20">
           <div className="card-premium max-w-5xl mx-auto p-12 bg-gradient-to-br from-primary via-indigo-600 to-purple-700 text-white border-none shadow-2xl relative overflow-hidden">
