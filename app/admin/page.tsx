@@ -1,43 +1,73 @@
-import { createClient } from "@/lib/supabase-server";
-import { supabaseAdmin } from "@/lib/supabase-admin";
-import { redirect } from "next/navigation";
+"use client";
+
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, CreditCard, Clock, Building2, TrendingUp, AlertTriangle } from "lucide-react";
+import { Users, CreditCard, Clock, Building2, TrendingUp, AlertTriangle, Loader2 } from "lucide-react";
 
-export const dynamic = 'force-dynamic';
+export default function AdminDashboard() {
+    const router = useRouter();
+    const [loading, setLoading] = useState(true);
+    const [data, setData] = useState<any>(null);
+    const [error, setError] = useState<string | null>(null);
 
-export default async function AdminDashboard() {
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    useEffect(() => {
+        const fetchData = async () => {
+            // 1. Check strict email match first
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user || user.email !== 'superadmin@noia.cloud') {
+                router.push('/dashboard');
+                return;
+            }
 
-    // 1. SECURITY CHECK POOR MAN'S RBAC
-    if (!user || user.email !== 'superadmin@noia.cloud') {
-        redirect('/dashboard');
-    }
+            // 2. Fetch data from secure API
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) return;
 
-    // 2. Fetch Data (Bypassing RLS)
-    const { data: orgs, error } = await supabaseAdmin
-        .from('organizations')
-        .select('*')
-        .order('created_at', { ascending: false });
+            try {
+                const res = await fetch('/api/admin/stats', {
+                    headers: {
+                        'Authorization': `Bearer ${session.access_token}`
+                    }
+                });
 
-    if (error) {
-        return <div className="p-10 text-destructive">Error loading admin data: {error.message}</div>;
-    }
+                if (!res.ok) {
+                    const err = await res.json();
+                    throw new Error(err.error || "Failed to load");
+                }
 
-    // 3. Calculate Stats
-    const totalAgencies = orgs?.length || 0;
-    const activeSubs = orgs?.filter(o => o.subscription_status === 'active').length || 0;
-    const trials = orgs?.filter(o => o.subscription_status === 'trial').length || 0;
-    const expired = orgs?.filter(o => ['expired', 'canceled'].includes(o.subscription_status)).length || 0;
+                const json = await res.json();
+                setData(json.orgs);
+            } catch (err: any) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [router]);
+
+    if (loading) return <div className="h-screen flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>;
+    if (error) return <div className="p-8 text-destructive font-bold">Error: {error}</div>;
+
+    const orgs = data || [];
+
+    // Calculate Stats
+    const totalAgencies = orgs.length;
+    const activeSubs = orgs.filter((o: any) => o.subscription_status === 'active').length;
+    const trials = orgs.filter((o: any) => o.subscription_status === 'trial').length;
+    const expired = orgs.filter((o: any) => ['expired', 'canceled'].includes(o.subscription_status)).length;
 
     // New registrations last 7 days
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-    const newRegs = orgs?.filter(o => new Date(o.created_at) > sevenDaysAgo).length || 0;
+    const newRegs = orgs.filter((o: any) => new Date(o.created_at) > sevenDaysAgo).length;
 
     return (
         <div className="min-h-screen bg-background text-foreground p-8 space-y-8">
+            {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-3xl font-black tracking-tight flex items-center gap-3">
@@ -46,7 +76,7 @@ export default async function AdminDashboard() {
                     <p className="text-muted-foreground">Benvenuto, SuperAdmin.</p>
                 </div>
                 <div className="text-right">
-                    <div className="text-sm font-bold text-emerald-500 flex items-center justify-end gap-2">
+                    <div className="text-sm font-bold text-emerald-500 flex items-center justify-center gap-2">
                         <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                         Live System Status
                     </div>
@@ -118,7 +148,7 @@ export default async function AdminDashboard() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-border/50">
-                                {orgs?.map((org) => (
+                                {orgs.map((org: any) => (
                                     <tr key={org.id} className="hover:bg-muted/10 transition-colors">
                                         <td className="px-4 py-3 font-medium">{org.name || 'N/A'}</td>
                                         <td className="px-4 py-3 text-muted-foreground">{new Date(org.created_at).toLocaleDateString()}</td>
@@ -141,7 +171,6 @@ export default async function AdminDashboard() {
                     </div>
                 </CardContent>
             </Card>
-
         </div>
     );
 }
