@@ -85,7 +85,7 @@ export default function BillingPage() {
             name: 'Elite',
             price: '99',
             agents: 'Da 6 a 9 Agenti',
-            features: ['Tutto incluso in Max', 'API Access', 'Account Manager Dedicato', 'Setup Assistito'],
+            features: ['Tutto incluso in Max', 'Multi-Agenzia & Dashboard Globale', 'API Access', 'Account Manager Dedicato', 'Setup Assistito'],
             popular: false
         }
     ];
