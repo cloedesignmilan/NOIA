@@ -62,6 +62,31 @@ export async function POST(req: Request) {
 
         if (settingsError) throw new Error(`Settings Creation Failed: ${settingsError.message}`);
 
+        // 5. Seed Default Categories (Entrate & Uscite)
+        const defaultCategories = [
+            // INCOME
+            { section: 'income', macro_category: 'intermediazione', name: '1.1 Comm. Vendita' },
+            { section: 'income', macro_category: 'intermediazione', name: '1.2 Comm. Locazione' },
+            { section: 'income', macro_category: 'servizi', name: '2.1 Consulenza' },
+            { section: 'income', macro_category: 'servizi', name: '2.2 Gestione Affitti' },
+            // EXPENSE
+            { section: 'expense', macro_category: 'marketing', name: 'Portali Immobiliari' },
+            { section: 'expense', macro_category: 'marketing', name: 'Social Ads' },
+            { section: 'expense', macro_category: 'ufficio', name: 'Affitto Ufficio' },
+            { section: 'expense', macro_category: 'ufficio', name: 'Utenze' },
+            { section: 'expense', macro_category: 'personale', name: 'Collaboratori' },
+            { section: 'expense', macro_category: 'tasse', name: 'Imposte e Tasse' }
+        ];
+
+        const { error: seedError } = await supabaseAdmin
+            .from('transaction_categories')
+            .insert(defaultCategories.map(c => ({ ...c, organization_id: orgData.id })));
+
+        if (seedError) {
+            console.error("Category Seeding Warning:", seedError);
+            // We don't rollback for this, it's non-critical, user can add manually.
+        }
+
         return NextResponse.json({ success: true, user });
 
     } catch (error: any) {
