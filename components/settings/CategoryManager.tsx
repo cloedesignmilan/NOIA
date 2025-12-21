@@ -15,13 +15,16 @@ const INCOME_MACROS = [
 ];
 
 const EXPENSE_MACROS = [
-    { id: 'personale', label: 'Personale' },
-    { id: 'ufficio', label: 'Ufficio' },
-    { id: 'marketing', label: 'Marketing' },
-    { id: 'tecnologia', label: 'Tecnologia' },
-    { id: 'trasporti', label: 'Trasporti' },
-    { id: 'fisco', label: 'Fisco' },
-    { id: 'varie', label: 'Varie' },
+    { id: 'personale', label: 'Costi per agenti e collaboratori' },
+    { id: 'ufficio', label: 'Costi di ufficio' },
+    { id: 'marketing', label: 'Marketing & pubblicità' },
+    { id: 'trasporti', label: 'Trasporti & trasferte' },
+    { id: 'tecnologia', label: 'Software & strumenti digitali' },
+    { id: 'consulenze', label: 'Consulenze & professionisti' },
+    { id: 'amministrativi', label: 'Costi amministrativi' },
+    { id: 'fisco', label: 'Imposte e tributi' },
+    { id: 'formazione', label: 'Formazione & crescita' },
+    { id: 'varie', label: 'Altre spese' },
 ];
 
 export function CategoryManager() {

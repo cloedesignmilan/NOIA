@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
-import { X, Check, Euro, Receipt, Tag, Calendar, ScanLine, Loader2, Users, Building2, Megaphone, Laptop, Car, Scale, AlertCircle, Pencil, Trash2, ArrowRight } from 'lucide-react';
+import { X, Check, Euro, Receipt, Tag, Calendar, ScanLine, Loader2, Users, Building2, Megaphone, Laptop, Car, Scale, AlertCircle, Pencil, Trash2, ArrowRight, BookOpen, Landmark } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/lib/supabase';
 import { useCurrentOrg } from '@/lib/hooks';
@@ -14,13 +14,16 @@ interface ExpenseFormProps {
 }
 
 const EXPENSE_MACROS = [
-    { id: 'personale', label: 'Personale', icon: Users },
-    { id: 'ufficio', label: 'Ufficio', icon: Building2 },
-    { id: 'marketing', label: 'Marketing', icon: Megaphone },
-    { id: 'tecnologia', label: 'Tecnologia', icon: Laptop },
-    { id: 'trasporti', label: 'Trasporti', icon: Car },
-    { id: 'fisco', label: 'Fisco', icon: Scale },
-    { id: 'varie', label: 'Varie', icon: AlertCircle },
+    { id: 'personale', label: 'Costi per agenti e collaboratori', icon: Users },
+    { id: 'ufficio', label: 'Costi di ufficio', icon: Building2 },
+    { id: 'marketing', label: 'Marketing & pubblicità', icon: Megaphone },
+    { id: 'trasporti', label: 'Trasporti & trasferte', icon: Car },
+    { id: 'tecnologia', label: 'Software & strumenti digitali', icon: Laptop },
+    { id: 'consulenze', label: 'Consulenze & professionisti', icon: Scale },
+    { id: 'amministrativi', label: 'Costi amministrativi', icon: Receipt },
+    { id: 'fisco', label: 'Imposte e tributi', icon: Landmark },
+    { id: 'formazione', label: 'Formazione & crescita', icon: BookOpen },
+    { id: 'varie', label: 'Altre spese', icon: AlertCircle },
 ];
 
 export function ExpenseForm({ isOpen, onClose, onSuccess, initialData }: ExpenseFormProps) {
