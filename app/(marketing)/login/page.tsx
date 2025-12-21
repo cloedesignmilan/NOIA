@@ -21,7 +21,11 @@ export default function LoginPage() {
 
         try {
             await signIn(email, password, rememberMe);
-            router.push('/dashboard');
+            if (email.toLowerCase() === 'superadmin@noia.cloud') {
+                router.push('/admin');
+            } else {
+                router.push('/dashboard');
+            }
         } catch (err: any) {
             console.error(err);
             setError(err.message || 'Email o password non validi.');

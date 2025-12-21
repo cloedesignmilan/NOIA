@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { SuperAdminGuard } from "@/components/SuperAdminGuard";
 import { ThemeProvider } from "@/components/theme-provider";
+import { DebugToolbar } from "@/components/DebugToolbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,6 +34,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <DebugToolbar />
+          <SuperAdminGuard />
           {children}
         </ThemeProvider>
       </body>

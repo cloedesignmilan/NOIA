@@ -37,6 +37,18 @@ export async function middleware(request: NextRequest) {
         data: { user },
     } = await supabase.auth.getUser()
 
+    // PROTECT: SuperAdmin Logic
+    if (user?.email?.toLowerCase() === 'superadmin@noia.cloud') {
+        const path = request.nextUrl.pathname;
+
+        // Allowed paths for Admin
+        // We must allow /admin and its subpaths.
+        // potentially /auth/callback if needed.
+        if (!path.startsWith('/admin') && !path.startsWith('/_next') && !path.startsWith('/api')) {
+            return NextResponse.redirect(new URL('/admin', request.url));
+        }
+    }
+
     // Optional: Protect routes here if needed
     // if (!user && request.nextUrl.pathname.startsWith('/dashboard')) {
     //   return NextResponse.redirect(new URL('/login', request.url))

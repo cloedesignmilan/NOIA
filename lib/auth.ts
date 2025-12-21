@@ -16,6 +16,7 @@ export async function createAgencyAccount(email: string, password: string, agenc
     const userId = authData.user.id;
 
     // 2. Create Organization
+    console.log("Creating Organization:", agencyName);
     const { data: orgData, error: orgError } = await supabase
         .from('organizations')
         .insert([{ name: agencyName, subscription_tier: 'free' }])
@@ -23,12 +24,12 @@ export async function createAgencyAccount(email: string, password: string, agenc
         .single();
 
     if (orgError) {
-        console.error("Org Creation Error:", orgError);
-        // Clean up user if possible or just throw (in prod we'd want a transaction)
-        throw new Error("Failed to create organization");
+        console.error("Org Creation Error Details:", orgError);
+        throw new Error(`Failed to create organization: ${orgError.message}`);
     }
 
     // 3. Create Profile linked to Org
+    console.log("Creating Profile for User:", userId, "Org:", orgData.id);
     const { error: profileError } = await supabase
         .from('profiles')
         .insert([{
@@ -40,8 +41,8 @@ export async function createAgencyAccount(email: string, password: string, agenc
         }]);
 
     if (profileError) {
-        console.error("Profile Creation Error:", profileError);
-        throw new Error("Failed to create profile");
+        console.error("Profile Creation Error Details:", profileError);
+        throw new Error(`Failed to create profile: ${profileError.message}`);
     }
 
     return { user: authData.user, org: orgData };

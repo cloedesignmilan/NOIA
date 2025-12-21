@@ -20,6 +20,12 @@ export default function DashboardHome() {
         const getUserData = async () => {
             const { data: { user } } = await supabase.auth.getUser();
             if (user) {
+                // FORCE REDIRECT SUPERADMIN
+                if (user.email?.toLowerCase() === 'superadmin@noia.cloud') {
+                    window.location.href = '/admin';
+                    return;
+                }
+
                 const { data: profile } = await supabase
                     .from('profiles')
                     .select('full_name')

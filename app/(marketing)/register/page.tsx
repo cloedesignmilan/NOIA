@@ -25,9 +25,29 @@ export default function RegisterPage() {
         setError('');
 
         try {
-            const fullName = `${formData.firstName} ${formData.lastName}`;
-            await createAgencyAccount(formData.email, formData.password, formData.agencyName, fullName);
-            router.push('/dashboard');
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: formData.email,
+                    password: formData.password,
+                    agencyName: formData.agencyName,
+                    fullName: `${formData.firstName} ${formData.lastName}`
+                })
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.error || "Registrazione fallita");
+            }
+
+            // Auto-login (optional, or redirect to login)
+            // Ideally backend returns a session, but for 'signUp' without auto-confirm we might just redirect.
+            // Let's redirect to login for safety and simplicity, or try to auto-signin.
+            // For now: Redirect to Login with success message.
+
+            router.push('/login?registered=true');
         } catch (err: any) {
             console.error(err);
             setError(err.message || 'Si è verificato un errore.');

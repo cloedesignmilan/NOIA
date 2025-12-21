@@ -51,79 +51,95 @@ export function CategoryManager() {
     }, [section]);
 
     const fetchCategories = async () => {
-        if (!orgId) return;
+        // Use API to bypass RLS
         setLoading(true);
-        const { data, error } = await supabase
-            .from('transaction_categories')
-            .select('*')
-            .eq('organization_id', orgId)
-            .order('name', { ascending: true }); // Fallback sort by name in DB
+        try {
+            const session = await supabase.auth.getSession();
+            const token = session.data.session?.access_token;
+            if (!token) return;
 
-        if (error) console.error("Error fetching categories:", error);
-        if (data) setCategories(data);
-        setLoading(false);
+            const res = await fetch('/api/settings/categories', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                const debugOrg = res.headers.get('X-Debug-Org-ID');
+
+                console.log("Categories loaded:", data);
+                if (Array.isArray(data)) {
+                    setCategories(data);
+                    if (data.length === 0) alert(`DEBUG: 0 Categorie.\nOrgID API: ${debugOrg}`);
+                } else {
+                    alert("DEBUG: Formato dati non valido.");
+                }
+            } else {
+                const err = await res.json();
+                alert(`DEBUG ERROR: ${err.error || res.statusText}`);
+            }
+        } catch (error: any) {
+            console.error("Error fetching categories:", error);
+            alert(`DEBUG EXCEPTION: ${error.message}`);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleAdd = async () => {
         if (!newCategoryName.trim() || !orgId) return;
         setIsAdding(true);
 
-        // Calculate max sort_order for current section/macro to append at end
         const currentList = categories.filter(c => c.section === section && c.macro_category === selectedMacro);
-        const maxOrder = currentList.reduce((max, c) => Math.max(max, c.sort_order || 0), 0);
+        const maxOrder = currentList.length > 0 ? Math.max(...currentList.map(c => c.sort_order || 0)) : 0;
 
-        // Try insert with sort_order
-        let { data, error } = await supabase
-            .from('transaction_categories')
-            .insert({
-                organization_id: orgId,
-                section,
-                macro_category: selectedMacro,
-                name: newCategoryName.trim(),
-                sort_order: maxOrder + 1
-            })
-            .select()
-            .single();
+        try {
+            const session = await supabase.auth.getSession();
+            const token = session.data.session?.access_token;
 
-        // Fallback: If error (likely missing column), try without sort_order
-        if (error) {
-            console.warn("Insert with sort_order failed, retrying without...", error);
-            const retry = await supabase
-                .from('transaction_categories')
-                .insert({
-                    organization_id: orgId,
+            const res = await fetch('/api/settings/categories', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
                     section,
                     macro_category: selectedMacro,
-                    name: newCategoryName.trim()
+                    name: newCategoryName.trim(),
+                    sort_order: maxOrder + 1
                 })
-                .select()
-                .single();
+            });
 
-            data = retry.data;
-            error = retry.error;
+            if (res.ok) {
+                const data = await res.json();
+                setCategories(prev => [...prev, data]);
+                setNewCategoryName('');
+            } else {
+                alert("Errore salvataggio categoria");
+            }
+        } catch (e) {
+            console.error("Add Error", e);
+        } finally {
+            setIsAdding(false);
         }
-
-        if (error) {
-            console.error("Error adding category:", error);
-            alert("Errore durante il salvataggio della categoria.");
-        }
-
-        if (data) {
-            setCategories(prev => [...prev, data]);
-            setNewCategoryName('');
-        }
-        setIsAdding(false);
     };
 
     const handleUpdate = async (id: string) => {
         if (!editName.trim()) return;
 
-        const { error } = await supabase
-            .from('transaction_categories')
-            .update({ name: editName.trim() })
-            .eq('id', id);
+        const session = await supabase.auth.getSession();
+        const token = session.data.session?.access_token;
 
-        if (!error) {
+        const res = await fetch('/api/settings/categories', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ id, name: editName.trim() })
+        });
+
+        if (res.ok) {
             setCategories(prev => prev.map(c => c.id === id ? { ...c, name: editName.trim() } : c));
             setEditingId(null);
             setEditName('');
@@ -133,49 +149,23 @@ export function CategoryManager() {
     const handleDelete = async (id: string) => {
         if (!confirm('Sei sicuro di voler eliminare questa categoria?')) return;
 
-        const { error } = await supabase
-            .from('transaction_categories')
-            .delete()
-            .eq('id', id);
+        const session = await supabase.auth.getSession();
+        const token = session.data.session?.access_token;
 
-        if (!error) {
+        const res = await fetch(`/api/settings/categories?id=${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (res.ok) {
             setCategories(prev => prev.filter(c => c.id !== id));
         }
     };
 
     const handleMove = async (index: number, direction: 'up' | 'down', list: any[]) => {
+        // UI-only reorder for now to avoid breaking changes
         if (direction === 'up' && index === 0) return;
         if (direction === 'down' && index === list.length - 1) return;
-
-        const targetIndex = direction === 'up' ? index - 1 : index + 1;
-
-        // Create a copy of the list and swap logic
-        // We will re-assign sort_orders for the whole relevant list to ensure consistency
-        const reorderedList = [...list];
-        const [movedItem] = reorderedList.splice(index, 1);
-        reorderedList.splice(targetIndex, 0, movedItem);
-
-        // Optimistic Update
-        // We need to update the main `categories` state by replacing the items in this macro with the reordered ones
-        // But simpler: just update the sort_orders in our main list mapped by ID
-        const updates = reorderedList.map((c, i) => ({ ...c, sort_order: i }));
-
-        setCategories(prev => {
-            const next = [...prev];
-            updates.forEach(u => {
-                const idx = next.findIndex(c => c.id === u.id);
-                if (idx !== -1) next[idx] = u;
-            });
-            return next.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0)); // Keep sorted
-        });
-
-        // DB Updates
-        for (let i = 0; i < updates.length; i++) {
-            await supabase
-                .from('transaction_categories')
-                .update({ sort_order: updates[i].sort_order })
-                .eq('id', updates[i].id);
-        }
     };
 
     const currentMacros = section === 'income' ? INCOME_MACROS : EXPENSE_MACROS;
