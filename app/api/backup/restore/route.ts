@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase-server';
+import { createClient } from '@supabase/supabase-js';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { NextResponse } from 'next/server';
 
@@ -6,11 +6,18 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
     try {
-        const supabase = await createClient();
+        // Manually handle Auth via Header
+        const authHeader = req.headers.get('Authorization');
+        if (!authHeader) return NextResponse.json({ error: 'Missing Authorization Header' }, { status: 401 });
 
-        // 1. Auth Check
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        const token = authHeader.replace('Bearer ', '');
+        const supabase = createClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+        );
+
+        const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+        if (authError || !user) return NextResponse.json({ error: 'Unauthorized: Invalid Token' }, { status: 401 });
 
         // 2. Get Org ID securely
         const { data: profile } = await supabase

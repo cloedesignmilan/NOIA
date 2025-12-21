@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Download, Database, ShieldCheck, Loader2 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { supabase } from "@/lib/supabase";
 
 export function BackupManager() {
     const [isExporting, setIsExporting] = useState(false);
@@ -13,11 +14,28 @@ export function BackupManager() {
     const handleExport = async () => {
         setIsExporting(true);
         try {
-            const response = await fetch('/api/backup/export');
+            // Get Session Token
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) throw new Error("Utente non autenticato");
+
+            const response = await fetch('/api/backup/export', {
+                headers: {
+                    'Authorization': `Bearer ${session.access_token}`
+                }
+            });
+
+            // ... (rest of logic handles errors) ...
 
             if (!response.ok) {
-                const err = await response.json();
-                throw new Error(err.error || "Export failed");
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.includes("application/json")) {
+                    const err = await response.json();
+                    throw new Error(err.error || "Export failed");
+                } else {
+                    const text = await response.text();
+                    console.error("Non-JSON API Error:", text);
+                    throw new Error(`Server Error (${response.status}): Controlla la console per dettagli.`);
+                }
             }
 
             // Create Blob and Trigger Download
@@ -43,9 +61,9 @@ export function BackupManager() {
             // Update last backup time locally (optimistic)
             setLastBackup(new Date().toISOString());
 
-        } catch (error) {
+        } catch (error: any) {
             console.error("Download failed:", error);
-            alert("Errore durante il download del backup. Riprova.");
+            alert(`Errore Download: ${error.message || "Errore sconosciuto"}`);
         } finally {
             setIsExporting(false);
         }
@@ -70,9 +88,16 @@ export function BackupManager() {
                 // Parse to verify JSON before sending
                 const parsed = JSON.parse(jsonContent);
 
+                // Get Session Token
+                const { data: { session } } = await supabase.auth.getSession();
+                if (!session) throw new Error("Utente non autenticato");
+
                 const response = await fetch('/api/backup/restore', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${session.access_token}`
+                    },
                     body: JSON.stringify(parsed)
                 });
 
