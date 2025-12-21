@@ -43,9 +43,7 @@ export async function POST(req: Request) {
                 organization_id: orgData.id,
                 full_name: fullName,
                 email: email,
-                role: 'owner',
-                role_level: 'admin',
-                access_level: 'full_access'
+                role: 'owner'
             }]);
 
         if (profileError) throw new Error(`Profile Creation Failed: ${profileError.message}`);
