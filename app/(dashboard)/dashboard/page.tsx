@@ -128,7 +128,7 @@ export default function DashboardHome() {
     }, [orgId]);
 
     const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
+        return new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(amount);
     };
 
     return (
