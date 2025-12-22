@@ -92,33 +92,37 @@ export async function POST(req: Request) {
         // 3. Create New Org
         const { data: newOrg, error: createError } = await supabaseAdmin
             .from('organizations')
-            .insert([{ name: name, subscription_tier: 'free' }]) // New sub-agencies start as free/managed? Or inherit? User said "Manage finances of multiple agencies". Usually they pay per agency or Elite covers X agencies? 
-            // Let's assume Elite allows creating them. They might need their own subs later?
-            // Or maybe Elite covers "Group Dashboard". 
-            // I'll set it to 'free' (or 'included' if we had that logic). 'free' is safest default.
-            .select()
-            .single();
+            .insert([{
+                name: name,
+                subscription_tier: 'pro',
+                subscription_status: 'active',
+                plan_tier: 'pro',
+                trial_ends_at: null
+            }])
 
         if (createError) throw createError;
+        if (!newOrg) throw new Error("Failed to create organization");
+
+        const org = newOrg as any;
 
         // 4. Add User as Owner
         await supabaseAdmin.from('organization_members').insert({
             user_id: user.id,
-            organization_id: newOrg.id,
+            organization_id: org.id,
             role: 'owner'
         });
 
         // 5. Create Settings
         await supabaseAdmin.from('agency_settings').insert({
-            organization_id: newOrg.id,
+            organization_id: org.id,
             agency_name: name,
             onboarding_completed: false // Trigger onboarding? Or skip?
         });
 
         // 6. Seed Categories
-        await seedCategories(newOrg.id);
+        await seedCategories(org.id);
 
-        return NextResponse.json({ success: true, organization: newOrg });
+        return NextResponse.json({ success: true, organization: org });
 
     } catch (error: any) {
         console.error('Create Agency Error:', error);

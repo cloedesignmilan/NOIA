@@ -70,7 +70,7 @@ export default function GlobalDashboardPage() {
 
             const { data: transactions } = await supabase
                 .from('transactions')
-                .select('amount, type, organization_id')
+                .select('amount, type, organization_id, withholding_tax')
                 .in('organization_id', orgIds);
             // Removed .eq('status', 'paid') to show ALL volume (paid + pending)
 
@@ -78,8 +78,10 @@ export default function GlobalDashboardPage() {
                 const orgTrans = transactions?.filter(t => t.organization_id === org.id) || [];
 
                 const income = orgTrans.filter(t => t.type === 'income').reduce((ss, t) => ss + (t.amount || 0), 0);
-                const expense = orgTrans.filter(t => t.type === 'expense').reduce((ss, t) => ss + (t.amount || 0), 0); // Expenses are usually stored negative? In previous steps I saw they are negative.
-                const net = income + expense; // algebraic sum
+                const expense = orgTrans.filter(t => t.type === 'expense').reduce((ss, t) => ss + (t.amount || 0), 0); // stored as negative
+                const withholding = orgTrans.filter(t => t.type === 'income').reduce((ss, t) => ss + (t.withholding_tax || 0), 0);
+
+                const net = (income - withholding) + expense; // (Gross - Withholding) - Expenses (expense is negative)
 
                 return {
                     id: org.id,
