@@ -78,78 +78,23 @@ export default function RegisterPage() {
                     </div>
                 )}
 
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Nome</label>
-                            <input
-                                name="firstName"
-                                required
-                                type="text"
-                                value={formData.firstName}
-                                onChange={handleChange}
-                                placeholder="Mario"
-                                className="w-full input-premium px-4 py-3"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Cognome</label>
-                            <input
-                                name="lastName"
-                                required
-                                type="text"
-                                value={formData.lastName}
-                                onChange={handleChange}
-                                placeholder="Rossi"
-                                className="w-full input-premium px-4 py-3"
-                            />
-                        </div>
-                    </div>
-                    <div className="space-y-2">
-                        <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Nome Agenzia</label>
-                        <input
-                            name="agencyName"
-                            required
-                            type="text"
-                            value={formData.agencyName}
-                            onChange={handleChange}
-                            placeholder="Immobiliare Srl"
-                            className="w-full input-premium px-4 py-3"
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Email</label>
-                        <input
-                            name="email"
-                            required
-                            type="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            placeholder="nome@agenzia.it"
-                            className="w-full input-premium px-4 py-3"
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Password</label>
-                        <input
-                            name="password"
-                            required
-                            type="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            placeholder="••••••••"
-                            className="w-full input-premium px-4 py-3"
-                        />
+                <div className="text-center py-8 space-y-4">
+                    <div className="bg-muted p-6 rounded-2xl border border-border">
+                        <p className="text-lg font-medium text-foreground">🚧 Iscrizioni Momentaneamente Chiuse</p>
+                        <p className="text-muted-foreground mt-2 text-sm">
+                            Stiamo effettuando dei test tecnici per migliorare l'esperienza.
+                            <br />
+                            Torniamo presto!
+                        </p>
                     </div>
 
-                    <button
-                        type="submit"
-                        disabled={isLoading}
-                        className="w-full flex items-center justify-center py-3.5 bg-primary text-primary-foreground font-bold rounded-xl shadow-lg shadow-primary/25 hover:bg-primary/90 transition-all mt-4 disabled:opacity-50"
-                    >
-                        {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Crea Account Agenzia"}
-                    </button>
-                </form>
+                    <Link href="/" className="inline-block mt-4 text-sm font-bold text-primary hover:underline">
+                        ← Torna alla Home
+                    </Link>
+                </div>
+
+
+
 
                 <div className="mt-6 text-center text-sm text-muted-foreground">
                     Hai già un account?{' '}
@@ -158,6 +103,6 @@ export default function RegisterPage() {
                     </Link>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

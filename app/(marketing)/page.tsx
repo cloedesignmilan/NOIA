@@ -18,9 +18,9 @@ export default function LandingPage() {
             <Link href="/login" className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Accedi
             </Link>
-            <Link href="/register" className="px-4 py-2 text-sm font-bold bg-primary text-primary-foreground rounded-xl shadow-lg shadow-primary/25 hover:bg-primary/90 transition-all">
-              Inizia Gratis
-            </Link>
+            <button className="px-4 py-2 text-sm font-bold bg-muted text-muted-foreground rounded-xl cursor-not-allowed opacity-70" disabled>
+              Iscrizioni Chiuse
+            </button>
           </div>
         </div>
       </header>
@@ -48,9 +48,9 @@ export default function LandingPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8 animate-in fade-in slide-in-from-bottom-16 duration-1000">
-            <Link href="/register" className="w-full sm:w-auto px-8 py-4 text-lg font-bold bg-primary text-primary-foreground rounded-2xl shadow-xl shadow-primary/30 hover:bg-primary/90 hover:scale-105 transition-all flex items-center justify-center gap-2">
-              <Zap className="w-5 h-5 fill-current" /> Prova Gratuitamente
-            </Link>
+            <button className="w-full sm:w-auto px-8 py-4 text-lg font-bold bg-muted text-muted-foreground rounded-2xl cursor-not-allowed opacity-70 flex items-center justify-center gap-2" disabled>
+              <Zap className="w-5 h-5 fill-current" /> Momentaneamente non disponibile
+            </button>
             <Link href="#features" className="w-full sm:w-auto px-8 py-4 text-lg font-medium bg-card border border-border rounded-2xl hover:bg-muted transition-colors flex items-center justify-center gap-2">
               Scopri di Più <ArrowRight className="w-4 h-4 ml-1" />
             </Link>
@@ -455,7 +455,7 @@ export default function LandingPage() {
                   <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-zinc-500" /> Gestione Commissioni</div>
                   <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-zinc-500" /> Supporto Prioritario</div>
                 </div>
-                <Link href="/register?plan=pro" className="mt-8 w-full py-3 rounded-xl border border-border font-bold hover:bg-muted transition-colors text-center">Scegli Pro</Link>
+                <button className="mt-8 w-full py-3 rounded-xl border border-border font-bold bg-muted text-muted-foreground cursor-not-allowed opacity-70" disabled>Sold Out</button>
               </div>
 
               {/* Max */}
@@ -475,7 +475,7 @@ export default function LandingPage() {
                   <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-primary" /> Ruoli Personalizzati</div>
                   <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-primary" /> Training AI Dedicato</div>
                 </div>
-                <Link href="/register?plan=max" className="mt-8 w-full py-3 rounded-xl bg-primary text-primary-foreground font-bold hover:bg-primary/90 transition-colors text-center shadow-lg shadow-primary/25">Scegli Max</Link>
+                <button className="mt-8 w-full py-3 rounded-xl bg-primary/50 text-primary-foreground font-bold cursor-not-allowed opacity-70 shadow-none" disabled>Sold Out</button>
               </div>
 
               {/* Elite */}
@@ -493,7 +493,7 @@ export default function LandingPage() {
                   <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-zinc-500" /> Account Manager Dedicato</div>
                   <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-zinc-500" /> Setup Assistito</div>
                 </div>
-                <Link href="/register?plan=elite" className="mt-8 w-full py-3 rounded-xl border border-border font-bold hover:bg-muted transition-colors text-center">Scegli Elite</Link>
+                <button className="mt-8 w-full py-3 rounded-xl border border-border font-bold bg-muted text-muted-foreground cursor-not-allowed opacity-70" disabled>Sold Out</button>
               </div>
             </div>
           </div>
@@ -511,9 +511,9 @@ export default function LandingPage() {
                 Unisciti alla rivoluzione. Risparmia 20 ore a settimana e chiudi più contratti con l'aiuto dell'Intelligenza Artificiale.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Link href="/register" className="px-10 py-5 text-xl font-bold bg-white text-primary rounded-2xl shadow-xl hover:bg-white/95 hover:scale-105 transition-all text-primary">
-                  Inizia la Prova Gratuita
-                </Link>
+                <button className="px-10 py-5 text-xl font-bold bg-white/20 text-white rounded-2xl cursor-not-allowed" disabled>
+                  Iscrizioni al momento chiuse
+                </button>
               </div>
               <div className="mt-8 flex items-center justify-center gap-6 text-sm text-white/70 font-medium">
                 <span className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4" /> 14 Giorni Gratis</span>
