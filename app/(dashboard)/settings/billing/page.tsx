@@ -10,9 +10,8 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 // Placeholder Plan IDs - You MUST create these in PayPal Developer Dashboard -> App -> Subscriptions -> Plans
 // For now, these are dummy placeholders. The buttons won't fully work without real Plan IDs from your PayPal account.
 const PAYPAL_PLAN_IDS = {
-    pro: 'P-19C144759Y500382HNE3U3XA',
-    max: 'P-1Y260182RJ7955225NE3U3JI',
-    elite: 'P-8BN59773CT2189616NE3U2YA'
+    standard_monthly: 'P-MONTHLY-PLACEHOLDER',
+    standard_annual: 'P-ANNUAL-PLACEHOLDER'
 };
 
 export default function BillingPage() {
@@ -65,28 +64,34 @@ export default function BillingPage() {
 
     const plans = [
         {
-            id: 'pro',
-            name: 'Pro',
-            price: '39',
-            agents: 'Fino a 2 Agenti',
-            features: ['Entrate & Uscite Illimitate', 'Dashboard Avanzata', 'Gestione Commissioni', 'Supporto Prioritario'],
-            popular: false
-        },
-        {
-            id: 'max',
-            name: 'Max',
-            price: '59',
-            agents: 'Da 3 a 5 Agenti',
-            features: ['Tutto incluso in Pro', 'Reportistica PDF', 'Ruoli Personalizzati', 'Training AI Dedicato'],
-            popular: true
-        },
-        {
-            id: 'elite',
-            name: 'Elite',
+            id: 'standard_monthly',
+            name: 'Mensile',
             price: '99',
-            agents: 'Da 6 a 9 Agenti',
-            features: ['Tutto incluso in Max', 'Multi-Agenzia & Dashboard Globale', 'API Access', 'Account Manager Dedicato', 'Setup Assistito'],
+            period: '/mese',
+            agents: 'Agenti Illimitati',
+            features: [
+                'Tutte le funzionalità incluse',
+                'Entrate & Uscite Illimitate',
+                'Dashboard Avanzata & Report PDF',
+                'Gestione Team Completa',
+                'Supporto Prioritario dedicated'
+            ],
             popular: false
+        },
+        {
+            id: 'standard_annual',
+            name: 'Annuale',
+            price: '990',
+            period: '/anno',
+            agents: 'Agenti Illimitati',
+            features: [
+                'Tutte le funzionalità incluse',
+                '2 MESI GRATIS (Risparmi 198€)',
+                'Priority Lane per nuove feature',
+                'Setup Assistito Gratuito',
+                'Tutto quello presente nel mensile'
+            ],
+            popular: true
         }
     ];
 
@@ -101,7 +106,7 @@ export default function BillingPage() {
                 <div className="text-center space-y-4 mb-12">
                     <h1 className="text-4xl font-extrabold tracking-tight">Scegli il piano perfetto per la tua agenzia</h1>
                     <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                        Tutti i piani includono 14 giorni di prova gratuita. Nessun costo nascosto.
+                        Tutti i piani includono 30 giorni di prova gratuita. Nessun costo nascosto.
                     </p>
                     {status === 'trial' && (
                         <div className="inline-block px-4 py-2 mt-4 bg-emerald-500/10 text-emerald-600 rounded-full text-sm font-bold border border-emerald-200 animate-pulse">
@@ -131,7 +136,7 @@ export default function BillingPage() {
                                 <h3 className={cn("text-xl font-bold", plan.popular ? "text-primary" : "text-foreground")}>{plan.name}</h3>
                                 <div className="flex items-baseline gap-1 mt-2">
                                     <span className="text-4xl font-black tracking-tight">€{plan.price}</span>
-                                    <span className="text-muted-foreground font-medium">/mese</span>
+                                    <span className="text-muted-foreground font-medium">{plan.period}</span>
                                 </div>
                                 <p className="text-sm font-medium text-muted-foreground mt-2 flex items-center gap-2">
                                     <Shield className="w-4 h-4" /> {plan.agents}

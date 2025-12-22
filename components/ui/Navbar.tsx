@@ -49,7 +49,7 @@ export function Navbar() {
                             <span className="text-xl font-bold tracking-tight text-foreground hidden sm:block">NO.IA</span>
                         </Link>
 
-                        {user && <AgencySwitcher />}
+                        {/* Multi-agency disabled for simplification: {user && <AgencySwitcher />} */}
 
                         {/* Desktop Nav */}
                         {user && (

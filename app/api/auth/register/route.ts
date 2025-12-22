@@ -33,7 +33,11 @@ export async function POST(req: Request) {
         // 2. Create Organization
         const { data: orgData, error: orgError } = await supabaseAdmin
             .from('organizations')
-            .insert([{ name: agencyName, subscription_tier: 'free' }])
+            .insert([{
+                name: agencyName,
+                subscription_tier: 'pro', // Default "Paid" tier logic, but in trial
+                trial_ends_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+            }])
             .select()
             .single();
 

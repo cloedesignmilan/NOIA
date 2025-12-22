@@ -18,9 +18,9 @@ export default function LandingPage() {
             <Link href="/login" className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Accedi
             </Link>
-            <button className="px-4 py-2 text-sm font-bold bg-muted text-muted-foreground rounded-xl cursor-not-allowed opacity-70" disabled>
-              Iscrizioni Chiuse
-            </button>
+            <Link href="/register" className="px-4 py-2 text-sm font-bold bg-primary text-primary-foreground rounded-xl shadow-lg shadow-primary/25 hover:bg-primary/90 transition-all">
+              Inizia Gratis
+            </Link>
           </div>
         </div>
       </header>
@@ -48,9 +48,9 @@ export default function LandingPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8 animate-in fade-in slide-in-from-bottom-16 duration-1000">
-            <button className="w-full sm:w-auto px-8 py-4 text-lg font-bold bg-muted text-muted-foreground rounded-2xl cursor-not-allowed opacity-70 flex items-center justify-center gap-2" disabled>
-              <Zap className="w-5 h-5 fill-current" /> Momentaneamente non disponibile
-            </button>
+            <Link href="/register" className="w-full sm:w-auto px-8 py-4 text-lg font-bold bg-primary text-primary-foreground rounded-2xl shadow-xl shadow-primary/30 hover:bg-primary/90 hover:scale-105 transition-all flex items-center justify-center gap-2">
+              <Zap className="w-5 h-5 fill-current" /> Prova Gratuitamente
+            </Link>
             <Link href="#features" className="w-full sm:w-auto px-8 py-4 text-lg font-medium bg-card border border-border rounded-2xl hover:bg-muted transition-colors flex items-center justify-center gap-2">
               Scopri di Più <ArrowRight className="w-4 h-4 ml-1" />
             </Link>
@@ -441,59 +441,67 @@ export default function LandingPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              {/* Pro */}
-              <div className="p-8 rounded-3xl border border-border bg-card/50 flex flex-col hover:border-border/80 transition-all">
-                <h3 className="text-xl font-bold mb-2">Pro</h3>
-                <div className="text-4xl font-black mb-2">€39<span className="text-sm font-medium text-muted-foreground">/mese</span></div>
-                <div className="flex items-center gap-2 mb-6 text-sm text-muted-foreground border-b border-border/50 pb-4">
-                  <ShieldCheck className="w-4 h-4" /> Fino a 2 Agenti
-                </div>
+              <div className="max-w-4xl mx-auto">
+                <div className="relative p-1 rounded-3xl bg-gradient-to-b from-primary/20 to-border/50">
+                  <div className="bg-card rounded-[22px] p-8 sm:p-12 border border-border shadow-2xl relative overflow-hidden">
 
-                <div className="space-y-4 flex-1">
-                  <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-zinc-500" /> Entrate & Uscite Illimitate</div>
-                  <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-zinc-500" /> Dashboard Avanzata</div>
-                  <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-zinc-500" /> Gestione Commissioni</div>
-                  <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-zinc-500" /> Supporto Prioritario</div>
-                </div>
-                <button className="mt-8 w-full py-3 rounded-xl border border-border font-bold bg-muted text-muted-foreground cursor-not-allowed opacity-70" disabled>Sold Out</button>
-              </div>
+                    <div className="absolute top-0 right-0 p-32 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
 
-              {/* Max */}
-              <div className="p-8 rounded-3xl border-2 border-primary bg-card/80 relative flex flex-col shadow-2xl shadow-primary/20 scale-105 z-10">
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <span className="bg-primary text-primary-foreground text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-lg">Consigliato</span>
-                </div>
-                <h3 className="text-xl font-bold mb-2 text-primary">Max</h3>
-                <div className="text-4xl font-black mb-2">€59<span className="text-sm font-medium text-muted-foreground">/mese</span></div>
-                <div className="flex items-center gap-2 mb-6 text-sm text-primary/80 border-b border-primary/20 pb-4">
-                  <ShieldCheck className="w-4 h-4" /> Da 3 a 5 Agenti
-                </div>
+                    <div className="text-center space-y-4 mb-12">
+                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-2">
+                        <Sparkles className="w-3 h-3" /> Tutto Incluso. Nessuna Sorpresa.
+                      </div>
+                      <h3 className="text-3xl sm:text-5xl font-black text-foreground">Unico Piano. Tutto Illimitato.</h3>
+                      <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Non amiamo i limiti. Hai accesso a tutte le funzionalità, agenti illimitati e supporto prioritario.</p>
+                    </div>
 
-                <div className="space-y-4 flex-1">
-                  <div className="flex items-center gap-3 text-sm font-medium"><CheckCircle2 className="w-4 h-4 text-primary" /> Tutto incluso in Pro</div>
-                  <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-primary" /> Reportistica PDF</div>
-                  <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-primary" /> Ruoli Personalizzati</div>
-                  <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-primary" /> Training AI Dedicato</div>
-                </div>
-                <button className="mt-8 w-full py-3 rounded-xl bg-primary/50 text-primary-foreground font-bold cursor-not-allowed opacity-70 shadow-none" disabled>Sold Out</button>
-              </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+                      {/* Monthly */}
+                      <div className="p-8 rounded-2xl border border-border bg-background/50 flex flex-col hover:border-primary/50 transition-all">
+                        <div className="text-lg font-bold text-muted-foreground mb-2">Pagamento Mensile</div>
+                        <div className="flex items-baseline gap-1 mb-6">
+                          <span className="text-5xl font-black text-foreground">€99</span>
+                          <span className="text-muted-foreground">/mese</span>
+                        </div>
+                        <ul className="space-y-4 mb-8 flex-1">
+                          <li className="flex items-center gap-3 text-sm font-medium"><CheckCircle2 className="w-5 h-5 text-primary" /> Agenti Illimitati</li>
+                          <li className="flex items-center gap-3 text-sm font-medium"><CheckCircle2 className="w-5 h-5 text-primary" /> Tutte le Funzionalità</li>
+                          <li className="flex items-center gap-3 text-sm font-medium"><CheckCircle2 className="w-5 h-5 text-primary" /> Disdici quando vuoi</li>
+                        </ul>
+                        <Link href="/register?plan=standard_monthly" className="w-full py-4 rounded-xl border border-border font-bold hover:bg-muted transition-colors text-center">
+                          Scegli Mensile
+                        </Link>
+                      </div>
 
-              {/* Elite */}
-              <div className="p-8 rounded-3xl border border-border bg-card/50 flex flex-col hover:border-purple-500/50 transition-all group">
-                <h3 className="text-xl font-bold mb-2 group-hover:text-purple-500 transition-colors">Elite</h3>
-                <div className="text-4xl font-black mb-2">€99<span className="text-sm font-medium text-muted-foreground">/mese</span></div>
-                <div className="flex items-center gap-2 mb-6 text-sm text-muted-foreground border-b border-border/50 pb-4">
-                  <ShieldCheck className="w-4 h-4" /> Da 6 a 9 Agenti
-                </div>
+                      {/* Annual */}
+                      <div className="p-8 rounded-2xl border-2 border-primary bg-primary/5 relative flex flex-col shadow-xl">
+                        <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                          <span className="bg-primary text-primary-foreground text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-lg whitespace-nowrap">
+                            2 Mesi Gratis
+                          </span>
+                        </div>
+                        <div className="text-lg font-bold text-primary mb-2">Pagamento Annuale</div>
+                        <div className="flex items-baseline gap-1 mb-6">
+                          <span className="text-5xl font-black text-foreground">€990</span>
+                          <span className="text-muted-foreground">/anno</span>
+                        </div>
+                        <p className="text-sm text-green-600 font-bold mb-6">Risparmi €198 all'anno</p>
+                        <ul className="space-y-4 mb-8 flex-1">
+                          <li className="flex items-center gap-3 text-sm font-medium"><CheckCircle2 className="w-5 h-5 text-primary" /> Tutto incluso nel Mensile</li>
+                          <li className="flex items-center gap-3 text-sm font-medium"><CheckCircle2 className="w-5 h-5 text-primary" /> <span className="underline">Setup Assistito Gratuito</span></li>
+                          <li className="flex items-center gap-3 text-sm font-medium"><CheckCircle2 className="w-5 h-5 text-primary" /> Priority Lane Supporto</li>
+                        </ul>
+                        <Link href="/register?plan=standard_annual" className="w-full py-4 rounded-xl bg-primary text-primary-foreground font-bold hover:bg-primary/90 transition-all text-center shadow-lg shadow-primary/25 transform hover:scale-105">
+                          Attiva Annuale
+                        </Link>
+                      </div>
+                    </div>
 
-                <div className="space-y-4 flex-1">
-                  <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-zinc-500" /> Tutto incluso in Max</div>
-                  <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-purple-500" /> <span className="font-bold text-foreground">Multi-Agenzia & Dashboard Globale</span></div>
-                  <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-zinc-500" /> API Access</div>
-                  <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-zinc-500" /> Account Manager Dedicato</div>
-                  <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-4 h-4 text-zinc-500" /> Setup Assistito</div>
+                    <p className="text-center text-sm text-muted-foreground mt-8">
+                      Entrambi i piani includono <span className="text-foreground font-bold">30 giorni di prova gratuita</span>. Nessuna carta richiesta.
+                    </p>
+                  </div>
                 </div>
-                <button className="mt-8 w-full py-3 rounded-xl border border-border font-bold bg-muted text-muted-foreground cursor-not-allowed opacity-70" disabled>Sold Out</button>
               </div>
             </div>
           </div>
@@ -511,12 +519,12 @@ export default function LandingPage() {
                 Unisciti alla rivoluzione. Risparmia 20 ore a settimana e chiudi più contratti con l'aiuto dell'Intelligenza Artificiale.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <button className="px-10 py-5 text-xl font-bold bg-white/20 text-white rounded-2xl cursor-not-allowed" disabled>
-                  Iscrizioni al momento chiuse
-                </button>
+                <Link href="/register" className="px-10 py-5 text-xl font-bold bg-white text-primary rounded-2xl shadow-xl hover:bg-white/95 hover:scale-105 transition-all text-primary">
+                  Inizia la Prova Gratuita
+                </Link>
               </div>
               <div className="mt-8 flex items-center justify-center gap-6 text-sm text-white/70 font-medium">
-                <span className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4" /> 14 Giorni Gratis</span>
+                <span className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4" /> 30 Giorni Gratis</span>
                 <span className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4" /> Disdici quando vuoi</span>
               </div>
             </div>
