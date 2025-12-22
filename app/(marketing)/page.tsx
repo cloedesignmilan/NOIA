@@ -440,68 +440,73 @@ export default function LandingPage() {
               <p className="text-lg text-muted-foreground">Piani flessibili per ogni fase della tua agenzia.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              <div className="max-w-4xl mx-auto">
-                <div className="relative p-1 rounded-3xl bg-gradient-to-b from-primary/20 to-border/50">
-                  <div className="bg-card rounded-[22px] p-8 sm:p-12 border border-border shadow-2xl relative overflow-hidden">
-
-                    <div className="absolute top-0 right-0 p-32 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
-
-                    <div className="text-center space-y-4 mb-12">
-                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-2">
-                        <Sparkles className="w-3 h-3" /> Tutto Incluso. Nessuna Sorpresa.
-                      </div>
-                      <h3 className="text-3xl sm:text-5xl font-black text-foreground">Unico Piano. Tutto Illimitato.</h3>
-                      <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Non amiamo i limiti. Hai accesso a tutte le funzionalità, agenti illimitati e supporto prioritario.</p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-                      {/* Monthly */}
-                      <div className="p-8 rounded-2xl border border-border bg-background/50 flex flex-col hover:border-primary/50 transition-all">
-                        <div className="text-lg font-bold text-muted-foreground mb-2">Pagamento Mensile</div>
-                        <div className="flex items-baseline gap-1 mb-6">
-                          <span className="text-5xl font-black text-foreground">€99</span>
-                          <span className="text-muted-foreground">/mese</span>
-                        </div>
-                        <ul className="space-y-4 mb-8 flex-1">
-                          <li className="flex items-center gap-3 text-sm font-medium"><CheckCircle2 className="w-5 h-5 text-primary" /> Agenti Illimitati</li>
-                          <li className="flex items-center gap-3 text-sm font-medium"><CheckCircle2 className="w-5 h-5 text-primary" /> Tutte le Funzionalità</li>
-                          <li className="flex items-center gap-3 text-sm font-medium"><CheckCircle2 className="w-5 h-5 text-primary" /> Disdici quando vuoi</li>
-                        </ul>
-                        <Link href="/register?plan=standard_monthly" className="w-full py-4 rounded-xl border border-border font-bold hover:bg-muted transition-colors text-center">
-                          Scegli Mensile
-                        </Link>
-                      </div>
-
-                      {/* Annual */}
-                      <div className="p-8 rounded-2xl border-2 border-primary bg-primary/5 relative flex flex-col shadow-xl">
-                        <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                          <span className="bg-primary text-primary-foreground text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-lg whitespace-nowrap">
-                            2 Mesi Gratis
-                          </span>
-                        </div>
-                        <div className="text-lg font-bold text-primary mb-2">Pagamento Annuale</div>
-                        <div className="flex items-baseline gap-1 mb-6">
-                          <span className="text-5xl font-black text-foreground">€990</span>
-                          <span className="text-muted-foreground">/anno</span>
-                        </div>
-                        <p className="text-sm text-green-600 font-bold mb-6">Risparmi €198 all'anno</p>
-                        <ul className="space-y-4 mb-8 flex-1">
-                          <li className="flex items-center gap-3 text-sm font-medium"><CheckCircle2 className="w-5 h-5 text-primary" /> Tutto incluso nel Mensile</li>
-                          <li className="flex items-center gap-3 text-sm font-medium"><CheckCircle2 className="w-5 h-5 text-primary" /> <span className="underline">Setup Assistito Gratuito</span></li>
-                          <li className="flex items-center gap-3 text-sm font-medium"><CheckCircle2 className="w-5 h-5 text-primary" /> Priority Lane Supporto</li>
-                        </ul>
-                        <Link href="/register?plan=standard_annual" className="w-full py-4 rounded-xl bg-primary text-primary-foreground font-bold hover:bg-primary/90 transition-all text-center shadow-lg shadow-primary/25 transform hover:scale-105">
-                          Attiva Annuale
-                        </Link>
-                      </div>
-                    </div>
-
-                    <p className="text-center text-sm text-muted-foreground mt-8">
-                      Entrambi i piani includono <span className="text-foreground font-bold">30 giorni di prova gratuita</span>. Nessuna carta richiesta.
-                    </p>
-                  </div>
+            <div className="max-w-5xl mx-auto">
+              {/* Header */}
+              <div className="text-center space-y-4 mb-16">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-2">
+                  <Sparkles className="w-3 h-3" /> Tutto Incluso. Nessuna Sorpresa.
                 </div>
+                <h3 className="text-3xl sm:text-5xl font-black text-foreground">Unico Piano. Tutto Illimitato.</h3>
+                <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                  Non amiamo i limiti. Hai accesso a tutte le funzionalità, agenti illimitati e supporto prioritario.
+                </p>
+              </div>
+
+              {/* Cards Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+
+                {/* Monthly Plan */}
+                <div className="rounded-3xl p-8 bg-card border border-border flex flex-col hover:border-border/80 transition-all shadow-lg hover:shadow-xl relative overflow-hidden group">
+                  <div className="text-lg font-bold text-muted-foreground mb-4">Pagamento Mensile</div>
+                  <div className="flex items-baseline gap-1 mb-6">
+                    <span className="text-5xl font-black text-foreground">€99</span>
+                    <span className="text-muted-foreground font-medium">/mese</span>
+                  </div>
+
+                  <div className="space-y-4 mb-8 flex-1">
+                    <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-5 h-5 text-zinc-500" /> Agenti <span className="font-bold text-foreground">Illimitati</span></div>
+                    <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-5 h-5 text-zinc-500" /> Tutte le Funzionalità</div>
+                    <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-5 h-5 text-zinc-500" /> Dashboard & Report PDF</div>
+                    <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-5 h-5 text-zinc-500" /> Disdici quando vuoi</div>
+                  </div>
+
+                  <Link href="/register?plan=standard_monthly" className="w-full py-4 rounded-xl border border-border font-bold hover:bg-muted transition-colors text-center block">
+                    Scegli Mensile
+                  </Link>
+                </div>
+
+                {/* Annual Plan (Featured) */}
+                <div className="rounded-3xl p-8 bg-card border-2 border-primary relative flex flex-col shadow-2xl shadow-primary/10 scale-100 md:scale-105 z-10 overflow-hidden">
+                  {/* Badge */}
+                  <div className="absolute top-0 right-0">
+                    <div className="bg-primary text-primary-foreground text-xs font-bold px-4 py-2 rounded-bl-2xl uppercase tracking-wider">
+                      2 Mesi Gratis
+                    </div>
+                  </div>
+
+                  <div className="text-lg font-bold text-primary mb-4">Pagamento Annuale</div>
+                  <div className="flex items-baseline gap-1 mb-2">
+                    <span className="text-5xl font-black text-foreground">€990</span>
+                    <span className="text-muted-foreground font-medium">/anno</span>
+                  </div>
+                  <p className="text-sm text-emerald-500 font-bold mb-6">Risparmi €198 subito</p>
+
+                  <div className="space-y-4 mb-8 flex-1">
+                    <div className="flex items-center gap-3 text-sm font-medium"><CheckCircle2 className="w-5 h-5 text-primary" /> <span className="font-bold">Tutto incluso nel Mensile</span></div>
+                    <div className="flex items-center gap-3 text-sm font-medium"><CheckCircle2 className="w-5 h-5 text-primary" /> Setup Assistito Gratuito</div>
+                    <div className="flex items-center gap-3 text-sm font-medium"><CheckCircle2 className="w-5 h-5 text-primary" /> Supporto Prioritario (WhatsApp)</div>
+                    <div className="flex items-center gap-3 text-sm font-medium"><CheckCircle2 className="w-5 h-5 text-primary" /> Training del Team incluso</div>
+                  </div>
+
+                  <Link href="/register?plan=standard_annual" className="w-full py-4 rounded-xl bg-primary text-primary-foreground font-bold hover:bg-primary/90 transition-all text-center block shadow-lg shadow-primary/25">
+                    Attiva Annuale
+                  </Link>
+
+                  <p className="text-center text-xs text-muted-foreground mt-4">
+                    30 Giorni di Prova Gratuita inclusi
+                  </p>
+                </div>
+
               </div>
             </div>
           </div>
