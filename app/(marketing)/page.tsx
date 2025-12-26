@@ -18,9 +18,9 @@ export default function LandingPage() {
             <Link href="/login" className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Accedi
             </Link>
-            <Link href="/register" className="px-4 py-2 text-sm font-bold bg-primary text-primary-foreground rounded-xl shadow-lg shadow-primary/25 hover:bg-primary/90 transition-all">
-              Inizia Gratis
-            </Link>
+            <div className="px-4 py-2 text-sm font-bold bg-muted text-muted-foreground rounded-xl border border-border cursor-not-allowed">
+              Iscrizioni Chiuse
+            </div>
           </div>
         </div>
       </header>
@@ -48,9 +48,9 @@ export default function LandingPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8 animate-in fade-in slide-in-from-bottom-16 duration-1000">
-            <Link href="/register" className="w-full sm:w-auto px-8 py-4 text-lg font-bold bg-primary text-primary-foreground rounded-2xl shadow-xl shadow-primary/30 hover:bg-primary/90 hover:scale-105 transition-all flex items-center justify-center gap-2">
-              <Zap className="w-5 h-5 fill-current" /> Prova Gratuitamente
-            </Link>
+            <div className="w-full sm:w-auto px-8 py-4 text-lg font-bold bg-muted text-muted-foreground rounded-2xl border border-border cursor-not-allowed flex items-center justify-center gap-2">
+              <Zap className="w-5 h-5 fill-current grayscale" /> Iscrizioni Chiuse
+            </div>
             <Link href="#features" className="w-full sm:w-auto px-8 py-4 text-lg font-medium bg-card border border-border rounded-2xl hover:bg-muted transition-colors flex items-center justify-center gap-2">
               Scopri di Più <ArrowRight className="w-4 h-4 ml-1" />
             </Link>
@@ -435,10 +435,7 @@ export default function LandingPage() {
         {/* Pricing Section */}
         <section id="pricing" className="py-24 border-t border-border/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16 space-y-4">
-              <h2 className="text-3xl sm:text-5xl font-black tracking-tight">Scegli la tua crescita.</h2>
-              <p className="text-lg text-muted-foreground">Piani flessibili per ogni fase della tua agenzia.</p>
-            </div>
+
 
             <div className="max-w-5xl mx-auto">
               {/* Header */}
@@ -470,9 +467,9 @@ export default function LandingPage() {
                     <div className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-5 h-5 text-zinc-500" /> Disdici quando vuoi</div>
                   </div>
 
-                  <Link href="/register?plan=standard_monthly" className="w-full py-4 rounded-xl border border-border font-bold hover:bg-muted transition-colors text-center block">
-                    Scegli Mensile
-                  </Link>
+                  <div className="w-full py-4 rounded-xl border border-border font-bold bg-muted text-muted-foreground text-center block cursor-not-allowed">
+                    Non Disponibile
+                  </div>
                 </div>
 
                 {/* Annual Plan (Featured) */}
@@ -498,9 +495,9 @@ export default function LandingPage() {
                     <div className="flex items-center gap-3 text-sm font-medium"><CheckCircle2 className="w-5 h-5 text-primary" /> Training del Team incluso</div>
                   </div>
 
-                  <Link href="/register?plan=standard_annual" className="w-full py-4 rounded-xl bg-primary text-primary-foreground font-bold hover:bg-primary/90 transition-all text-center block shadow-lg shadow-primary/25">
-                    Attiva Annuale
-                  </Link>
+                  <div className="w-full py-4 rounded-xl bg-muted text-muted-foreground font-bold border border-border text-center block cursor-not-allowed">
+                    Non Disponibile
+                  </div>
 
                   <p className="text-center text-xs text-muted-foreground mt-4">
                     30 Giorni di Prova Gratuita inclusi
@@ -524,9 +521,9 @@ export default function LandingPage() {
                 Unisciti alla rivoluzione. Risparmia 20 ore a settimana e chiudi più contratti con l'aiuto dell'Intelligenza Artificiale.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Link href="/register" className="px-10 py-5 text-xl font-bold bg-white text-primary rounded-2xl shadow-xl hover:bg-white/95 hover:scale-105 transition-all text-primary">
-                  Inizia la Prova Gratuita
-                </Link>
+                <div className="px-10 py-5 text-xl font-bold bg-white/10 text-white/50 rounded-2xl border border-white/20 cursor-not-allowed backdrop-blur-sm">
+                  Iscrizioni al momento chiuse
+                </div>
               </div>
               <div className="mt-8 flex items-center justify-center gap-6 text-sm text-white/70 font-medium">
                 <span className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4" /> 30 Giorni Gratis</span>
